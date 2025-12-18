@@ -62,7 +62,15 @@
 
 #### Gauss Elimination Theory
 
-Gauss Elimination is a method to solve a system of linear equations by converting the matrix into Row Echelon Form using row operations. It solves the linear equations by using back substitution in the Row Echelon Form matrix.
+Gauss Elimination is a method to solve a system of linear equations by converting the matrix into Row Echelon Form using elementary row operations. In this method, the given system of equations is written in augmented matrix form [A | H]. Then, forward elimination is performed to the matrix which converts the matrix into an upper triangular (Row Echelon Form) matrix. In upper triangular matrix, all elements below the main diagonal are zero. After that, the values of the variables are computed using back substitution starting from the last equation in Row Echelon Form matrix.
+
+Algorithm:
+
+1. The system of linear equations is written in augmented matrix form.
+2. The first element of the first row is chosen as the pivot element.
+3. All elements below the pivot element are converted to zero using elementary row operations.
+4. Moving to the next row and next column, the forward elimination process is performed until the matrix converts into an upper triangular (row echelon form) matrix.
+5. Lastly, back substitution is used to find the solution of the linear equations.
 
 #### Gauss Elimination Code
 
@@ -234,6 +242,20 @@ int main(void)
 2 2 5
 ```
 
+##### Input Format
+
+```
+The input is taken from a file named GaussEliminationInput.txt.
+
+The first line of input contains an integer T - the number of test cases.
+
+For each test case:
+
+The first line contains an integer n - the number of equations.
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
+```
+
 #### Gauss Elimination Output
 
 ```
@@ -261,13 +283,43 @@ The system of equations are:
 No solution
 ```
 
+##### Output Format
+
+```
+The output is written to a file named GaussEliminationOutput.txt.
+
+For each test case, the program prints:
+
+The system of linear equations.
+
+Nature of the solution: (Unique solution, No solution, Infinite solutions)
+
+If the solution is unique, then print The Row Echelon Form Matrix.
+
+The solution vector.
+
+else If there is no solution, then print No solution.
+
+else If there is infinite solutions, then print Infinite solutions.
+
+All floating-point values are printed with 3 decimal places.
+```
+
 ---
 
 ### Gauss Jordan Elimination Method
 
 #### Gauss Jordan Theory
 
-Gauss Jordan Elimination is a method to solve a system of linear equations by converting the matrix into Reduced Row Echelon Form using row operations. The constant vector of the Reduced Row Echelon Form matrix is the solution of linear equations.
+The Gauss Jordan Elimination Method is used to solve a system of linear equations by using forward and backward elimination. In this method, the given system of equations is written in augmented matrix form [A | H]. Then, the matrix is converted into Reduced Row Echelon Form. That is, the diagonal elements of the matrix are made 1 and all other elements in each pivot column are made zero. After that, the solution is obtained from the constant vector part of the Reduced Row Echelon Form matrix.
+
+Algorithm:
+
+1. The system of linear equations is written in augmented matrix form.
+2. A pivot element is selected and made equal to 1 by dividing the entire row by the pivot element.
+3. All other elements in the pivot column made zero by using forward and backward elimination.
+4. Move to the next pivot position and repeat the process until the coefficient part of the matrix is converted into an identity matrix.
+5. The solution is obtained from the constant vector part of the matrix.
 
 #### Gauss Jordan Code
 
@@ -438,6 +490,20 @@ int main(void)
 2 2 5
 ```
 
+##### Input Format
+
+```
+The input is taken from a file named GaussJordanEliminationInput.txt.
+
+The first line of input contains an integer T - the number of test cases.
+
+For each test case:
+
+The first line contains an integer n - the number of equations.
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
+```
+
 #### Gauss Jordan Output
 
 ```
@@ -465,14 +531,39 @@ The system of equations are:
 No solution
 ```
 
+##### Output Format
+
+```
+The output is written to a file named GaussJordanEliminationOutput.txt.
+
+For each test case, the program prints:
+
+The system of linear equations.
+
+Nature of the solution: (Unique solution, No solution, Infinite solutions)
+
+If the solution is unique, then print the Reduced Row Echelon Form Matrix.
+
+The solution vector.
+
+else If there is no solution, then print No solution.
+
+else If there is infinite solutions, then print Infinite solutions.
+
+All floating-point values are printed with 3 decimal places.
+```
+
 ---
 
 ### LU Decomposition Method
+
 Implemented by 2207008
+
 #### LU Decomposition Theory
 
 LU factorrization is a matrix decomposition technique used to solve a system of linear equations efficientlly. This method is also called Cholesky method, Doolittle's method, Crout's method. In this method, a square matrix A is decomposed into the product of two triangluar matrices. A = LU. Here L is a lower triangular matrix whose all diagonal elements are 1 and U is an upper triangular matrix. It simplifies the system AX = B by converting it into two simpler systems. AX = B --> LUX = B --> LY = B where (UX = Y). Then solves LY = B by forward substitution and UX = Y. This method is useful when solving system with the same coefficient matrix A but the constant vector B changes. <br>
 Calculation steps:<br>
+
 1. First row of U : u11, u12, u13...
 2. First column of L : l21, l31...
 3. Second row of U : u22, u23...
@@ -480,10 +571,10 @@ Calculation steps:<br>
 5. Third row of U : u33... <br>
 
 Solution Classification:<br>
+
 1. After decomposition if U[i][i] is zero and Y[i] is non-zero then system has no solution.
 2. If both are zero, the system has infinite solution.
-3. Otherwise, the system has a unique solution. 
-
+3. Otherwise, the system has a unique solution.
 
 #### LU Decomposition Code
 
@@ -641,6 +732,7 @@ int main()
 ```
 
 ##### Input Format
+
 ```
 The input is taken from a file named LU_input.txt.
 
@@ -652,29 +744,30 @@ The first line contains an integer n — the number of equations (size of the sy
 
 The next n lines each contain n + 1 real numbers (augmented matrix).
 ```
+
 #### LU Decomposition Output
 
 ```
-LU Factorization method : 
-Output for case 1 : 
+LU Factorization method :
+Output for case 1 :
 
-Lower Triangular Matrix (L) : 
-1.000 0.000 0.000 0.000 0.000 
-0.500 1.000 0.000 0.000 0.000 
-1.500 0.200 1.000 0.000 0.000 
-1.000 0.000 0.800 1.000 0.000 
-0.500 -0.600 0.800 1.714 1.000 
+Lower Triangular Matrix (L) :
+1.000 0.000 0.000 0.000 0.000
+0.500 1.000 0.000 0.000 0.000
+1.500 0.200 1.000 0.000 0.000
+1.000 0.000 0.800 1.000 0.000
+0.500 -0.600 0.800 1.714 1.000
 
-Upper Triangular Matrix (U) : 
-2.000 1.000 -1.000 3.000 2.000 
-0.000 2.500 2.500 -2.500 0.000 
-0.000 0.000 5.000 -3.000 -5.000 
-0.000 0.000 0.000 1.400 3.000 
-0.000 0.000 0.000 0.000 1.857 
+Upper Triangular Matrix (U) :
+2.000 1.000 -1.000 3.000 2.000
+0.000 2.500 2.500 -2.500 0.000
+0.000 0.000 5.000 -3.000 -5.000
+0.000 0.000 0.000 1.400 3.000
+0.000 0.000 0.000 0.000 1.857
 
 System has unique solution!
 
-Solution : 
+Solution :
 x1 = 5.154
 x2 = -1.000
 x3 = 2.262
@@ -683,29 +776,29 @@ x5 = 1.185
 
 ------------------------------
 
-Output for case 2 : 
+Output for case 2 :
 
-Lower Triangular Matrix (L) : 
-1.000 0.000 
-2.000 1.000 
+Lower Triangular Matrix (L) :
+1.000 0.000
+2.000 1.000
 
-Upper Triangular Matrix (U) : 
-1.000 1.000 
-0.000 0.000 
+Upper Triangular Matrix (U) :
+1.000 1.000
+0.000 0.000
 
 Infinite Solution!
 
 ------------------------------
 
-Output for case 3 : 
+Output for case 3 :
 
-Lower Triangular Matrix (L) : 
-1.000 0.000 
-2.000 1.000 
+Lower Triangular Matrix (L) :
+1.000 0.000
+2.000 1.000
 
-Upper Triangular Matrix (U) : 
-1.000 1.000 
-0.000 0.000 
+Upper Triangular Matrix (U) :
+1.000 1.000
+0.000 0.000
 
 No Solution!
 
@@ -713,7 +806,9 @@ No Solution!
 
 
 ```
+
 ##### Output Format
+
 ```
 The output is written to a file named LU_output.txt.
 
@@ -733,13 +828,23 @@ A separator line after each test case.
 
 All floating-point values are printed with 3 decimal places.
 ```
+
 ---
 
 ### Matrix Inversion Method
 
 #### Matrix Inversion Theory
 
-Matrix Inversion Method solves the system of linear equations (AX = B) by finding the inverse matrix (A^-1) of the corresponding co-efficient matrix (A) of the system of linear equations. Then it determines the solution by multiplying the inverse matrix with the constant vector (X = A^-1 x B).
+The Matrix Inversion Method is used to solve a system of linear equations when the coefficient matrix is square and invertible. In this method, the inverse of the coefficient matrix is calculated and then multiplied with the constant matrix to determine the solution.
+
+Algorithm:
+
+1. The coefficients of the system of linear equations are written into matrix form.
+2. Check if the matrix is square and its determinant is non-zero.
+3. Determine the cofactor matrix of the coefficient matrix.
+4. Perform transpose operation to convert the cofactor matrix into adjoint matrix.
+5. Divide all the elements of the adjoint matrix by the determinant of the coefficient matrix to convert the adjoint matrix into inverse matrix.
+6. Multiply the inverse matrix with constant matrix to determine the solution of the system of equations.
 
 #### Matrix Inversion Code
 
@@ -1000,6 +1105,20 @@ int main(void)
 2 2 5
 ```
 
+##### Input Format
+
+```
+The input is taken from a file named MatrixInversionInput.txt.
+
+The first line of input contains an integer T - the number of test cases.
+
+For each test case:
+
+The first line contains an integer n - the number of equations.
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
+```
+
 #### Matrix Inversion Output
 
 ```
@@ -1033,24 +1152,50 @@ The system of equations are:
 No solution
 ```
 
+##### Output Format
+
+```
+The output is written to a file named MatrixInversionOutput.txt.
+
+For each test case, the program prints:
+
+The system of linear equations.
+
+The Transpose Matrix.
+
+The Inverse Matrix.
+
+Nature of the solution: (Unique solution, No solution, Infinite solutions)
+
+If the solution is unique, then print the solution vector.
+
+else If there is no solution, then print No solution.
+
+else If there is infinite solutions, then print Infinite solutions.
+
+All floating-point values are printed with 3 decimal places.
+```
+
 ---
 
 ### Solution of Non-Linear Equations
 
 ### Bisection Method
+
 Implemented by 2207008
 
 #### Bisection Theory
 
 The Bisection Method is a numerical method used to approximate a real root of a nonlinear equation of the form: f(x) = 0. It is also called Binary chopping or half-interval method. It is a braketing method which states that if a continuous function f(x) gives opposite signs at two points a and b, then at least one real root exists in the interval (a,b).<br>
 Algorithm:<br>
+
 1. Let x1 = a and x2 = b. Define x0 as the midpoint between a and b. x0 = (x1 + x2) / 2.
 2. Evaluate f(x0), f(x1), f(x2).
 3. If f(x0) = 0, then the root is x0.
-3. Select the subinterval where the sign change occurs based on the following conditions:<br>
-If f(x0) * f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
-If f(x0) * f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
-4. Repeat the step 3 while fabs(f(x0)) > E. (Solution is close enough to zero).
+4. Select the subinterval where the sign change occurs based on the following conditions:<br>
+   If f(x0) _ f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
+   If f(x0) _ f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
+5. Repeat the step 3 while fabs(f(x0)) > E. (Solution is close enough to zero).
 
 #### Bisection Code
 
@@ -1173,10 +1318,11 @@ int main()
 ```
 4
 0.5 0.0001
-1 0 -5 0 4 
+1 0 -5 0 4
 ```
 
 ##### Input Format
+
 ```
 The input is read from a file named BiSection_input.txt.
 
@@ -1190,7 +1336,7 @@ The third line contains n + 1 real numbers : Coefficients of the polynomial in d
 #### Bisection Output
 
 ```
-Bisection method : 
+Bisection method :
 The inputted equation is : 1x^4 - 5x^2 + 4 = 0
 Bracket for root 1 : [-2.162, -1.662]
 Iteration needed : 15
@@ -1212,6 +1358,7 @@ Root 4 : 2.000
 ```
 
 ##### Output Format:
+
 ```
 The output is written to a file named BiSection_output.txt.
 
@@ -1315,20 +1462,23 @@ All floating-point values are printed with 3 decimal places.
 ### Solution of Differential Equations
 
 ### Runge-Kutta Method
+
 Implemented by 2207008
 
 #### Runge-Kutta Theory
+
 The Runge-Kutta 4th Order (RK4) method is a numerical technique to approximate the solution of a first-order ordinary differential equation (ODE) which is of the the form: dy/dx = f(x, y), y(x0) = y0. It provies a good balance between accuracy and computational efficiency.<br>
 
-Algorithm: 
+Algorithm:
+
 1. Given a initial value of x --> x0 and y --> y0.
 2. Given a step size h, the value of y at the next point is computed using four intermediate slopes: <br>
-k1 = h * f(xn, yn)<br>
-k2 = h * f(xn + h/2. yn + k1/2)<br>
-k3 = h * f(xn + h/2, yn + k2/2)<br>
-k4 = h * f(xn + h, y0 + k3)
+   k1 = h _ f(xn, yn)<br>
+   k2 = h _ f(xn + h/2. yn + k1/2)<br>
+   k3 = h _ f(xn + h/2, yn + k2/2)<br>
+   k4 = h _ f(xn + h, y0 + k3)
 3. The next value of y is then calculated as:<br>
-yn+1 = yn + (k1 + 2 * k2 + 2 * k3 + k4) / 6
+   yn+1 = yn + (k1 + 2 _ k2 + 2 _ k3 + k4) / 6
 
 #### Runge-Kutta Code
 
@@ -1418,6 +1568,7 @@ int main()
 ```
 
 ##### Input Format
+
 ```
 The input is read from a file named RK_input.txt.
 
@@ -1431,7 +1582,7 @@ The third line contains a real number: h (step size)
 #### Runge-Kutta Output
 
 ```
-RK4 Method: 
+RK4 Method:
 Step 1: x = 0.100  y = 1.110
 Step 2: x = 0.200  y = 1.240
 
@@ -1440,6 +1591,7 @@ Final Result: yn = 1.240
 ```
 
 ##### Output Format
+
 ```
 The output is written to a file named RK_output.txt.
 
