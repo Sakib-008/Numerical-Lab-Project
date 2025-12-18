@@ -469,26 +469,276 @@ No solution
 
 ### LU Decomposition Method
 
+Implemented by 2207008
+
 #### LU Decomposition Theory
 
-[Add your theory content here]
+LU factorrization is a matrix decomposition technique used to solve a system of linear equations efficientlly. This method is also called Cholesky method, Doolittle's method, Crout's method. In this method, a square matrix A is decomposed into the product of two triangluar matrices. A = LU. Here L is a lower triangular matrix whose all diagonal elements are 1 and U is an upper triangular matrix. It simplifies the system AX = B by converting it into two simpler systems. AX = B --> LUX = B --> LY = B where (UX = Y). Then solves LY = B by forward substitution and UX = Y. This method is useful when solving system with the same coefficient matrix A but the constant vector B changes. <br>
+Calculation steps:<br>
+
+1. First row of U : u11, u12, u13...
+2. First column of L : l21, l31...
+3. Second row of U : u22, u23...
+4. Second column of L : l32...
+5. Third row of U : u33... <br>
+
+Solution Classification:<br>
+
+1. After decomposition if U[i][i] is zero and Y[i] is non-zero then system has no solution.
+2. If both are zero, the system has infinite solution.
+3. Otherwise, the system has a unique solution.
 
 #### LU Decomposition Code
 
 ```python
-# Add your code here
+// LU Decomposition implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    ifstream in("LU_input.txt");
+    ofstream out("LU_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        return 1;
+    }
+
+    out << fixed << setprecision(3);
+    out<<"LU Factorization method : "<<endl;
+
+    int t; // Number of test cases
+    in >> t;
+    for (int cs = 1; cs <= t; cs++)
+    {
+        int n;
+        in >> n; // Number of equations.
+        vector<vector<double>> A(n, vector<double>(n)), L(n, vector<double>(n, 0)), U(n, vector<double>(n, 0));
+        vector<double> B(n), X(n), Y(n);
+
+        // Entering the augmented matrix.
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                in >> A[i][j];
+            }
+            in >> B[i];
+        }
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i; j < n; j++)
+            {
+                double sum = 0;
+                for (int k = 0; k < i; k++)
+                {
+                    sum += L[i][k] * U[k][j];
+                }
+                U[i][j] = A[i][j] - sum;
+            }
+            for (int j = i; j < n; j++)
+            {
+                if (i == j)
+                    L[i][j] = 1;
+                else
+                {
+                    double sum = 0;
+                    for (int k = 0; k < i; k++)
+                    {
+                        sum += L[j][k] * U[k][i];
+                    }
+                    L[j][i] = (A[j][i] - sum) / U[i][i];
+                }
+            }
+        }
+        out << "Output for case " << cs << " : " << endl;
+        out << "\nLower Triangular Matrix (L) : " << endl;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                out << L[i][j] << " ";
+            }
+            out << endl;
+        }
+        out << "\nUpper Triangular Matrix (U) : " << endl;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                out << U[i][j] << " ";
+            }
+            out << endl;
+        }
+        for (int i = 0; i < n; i++)
+        {
+            double sum = 0;
+            for (int j = 0; j < i; j++)
+            {
+                sum += L[i][j] * Y[j];
+            }
+            Y[i] = B[i] - sum;
+        }
+        bool soln = true;
+        for (int i = 0; i < n; i++)
+        {
+            if (fabs(U[i][i]) < 1e-9 && fabs(Y[i]) > 1e-9)
+            {
+                out << "\nNo Solution!" << endl;
+                        out << "\n------------------------------\n" << endl;
+                soln = false;
+                break;
+            }
+            else if (fabs(U[i][i]) < 1e-9 && fabs(Y[i]) < 1e-9)
+            {
+                out << "\nInfinite Solution!" << endl;
+                        out << "\n------------------------------\n" << endl;
+                soln = false;
+                break;
+            }
+        }
+        if (soln == false)
+            continue;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            double sum = 0;
+            for (int j = i + 1; j < n; j++)
+            {
+                sum += U[i][j] * X[j];
+            }
+            X[i] = (Y[i] - sum) / U[i][i];
+        }
+        out << "\nSystem has unique solution!" << endl;
+        out << "\nSolution : " << endl;
+        for (int i = 0; i < n; i++)
+        {
+            out << "x" << i + 1 << " = " << X[i] << endl;
+        }
+        out << "\n------------------------------\n" << endl;
+    }
+    in.close();
+    out.close();
+    return 0;
+}
 ```
 
 #### LU Decomposition Input
 
 ```
-[Add your input format here]
+3
+5
+2 1 -1 3 2 9
+1 3 2 -1 1 8
+3 2 4 1 -2 20
+2 1 3 2 1 17
+1 -1 2 3 4 15
+2
+1 1 2
+2 2 4
+2
+1 1 2
+2 2 5
+```
+
+##### Input Format
+
+```
+The input is taken from a file named LU_input.txt.
+
+The first line contains an integer t — the number of test cases.
+
+For each test case:
+
+The first line contains an integer n — the number of equations (size of the system).
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
 ```
 
 #### LU Decomposition Output
 
 ```
-[Add your output format here]
+LU Factorization method :
+Output for case 1 :
+
+Lower Triangular Matrix (L) :
+1.000 0.000 0.000 0.000 0.000
+0.500 1.000 0.000 0.000 0.000
+1.500 0.200 1.000 0.000 0.000
+1.000 0.000 0.800 1.000 0.000
+0.500 -0.600 0.800 1.714 1.000
+
+Upper Triangular Matrix (U) :
+2.000 1.000 -1.000 3.000 2.000
+0.000 2.500 2.500 -2.500 0.000
+0.000 0.000 5.000 -3.000 -5.000
+0.000 0.000 0.000 1.400 3.000
+0.000 0.000 0.000 0.000 1.857
+
+System has unique solution!
+
+Solution :
+x1 = 5.154
+x2 = -1.000
+x3 = 2.262
+x4 = -0.138
+x5 = 1.185
+
+------------------------------
+
+Output for case 2 :
+
+Lower Triangular Matrix (L) :
+1.000 0.000
+2.000 1.000
+
+Upper Triangular Matrix (U) :
+1.000 1.000
+0.000 0.000
+
+Infinite Solution!
+
+------------------------------
+
+Output for case 3 :
+
+Lower Triangular Matrix (L) :
+1.000 0.000
+2.000 1.000
+
+Upper Triangular Matrix (U) :
+1.000 1.000
+0.000 0.000
+
+No Solution!
+
+------------------------------
+
+
+```
+
+##### Output Format
+
+```
+The output is written to a file named LU_output.txt.
+
+For each test case, the program prints:
+
+The case number.
+
+Lower Triangular Matrix L.
+
+Upper Triangular Matrix U.
+
+Nature of the solution: (No solution, Infinite soltuion, unique solution)
+
+If the solution is unique, then print the solution vector.
+
+A separator line after each test case.
+
+All floating-point values are printed with 3 decimal places.
 ```
 
 ---
@@ -797,31 +1047,208 @@ No solution
 
 ### Bisection Method
 
+Implemented by 2207008
+
 #### Bisection Theory
 
-[Add your theory content here]
+The Bisection Method is a numerical method used to approximate a real root of a nonlinear equation of the form: f(x) = 0. It is also called Binary chopping or half-interval method. It is a braketing method which states that if a continuous function f(x) gives opposite signs at two points a and b, then at least one real root exists in the interval (a,b).<br>
+Algorithm:<br>
+
+1. Let x1 = a and x2 = b. Define x0 as the midpoint between a and b. x0 = (x1 + x2) / 2.
+2. Evaluate f(x0), f(x1), f(x2).
+3. If f(x0) = 0, then the root is x0.
+4. Select the subinterval where the sign change occurs based on the following conditions:<br>
+   If f(x0) _ f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
+   If f(x0) _ f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
+5. Repeat the step 3 while fabs(f(x0)) > E. (Solution is close enough to zero).
 
 #### Bisection Code
 
 ```python
-# Add your code here
+// Bi_Section implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x, vector<double> &v)
+{
+    double result = 0;
+    int n = v.size();
+    for (int i = 0; i < n; i++)
+    {
+        int deg = n - i - 1;
+        result += v[i] * pow(x, deg);
+    }
+    return result;
+}
+
+int main()
+{
+    ifstream in("BiSection_input.txt");
+    ofstream out("BiSection_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        return 1;
+    }
+
+    int n;
+    in >> n; // Degree of the polynomial equation
+    double stepSize, e;
+    in >> stepSize >> e; // Step size and tolerance
+    vector<double> eqn(n + 1);
+    for (int i = 0; i <= n; i++)
+    {
+        in >> eqn[i]; // Coefficients of the polynomial
+    }
+
+    out << "Bisection method : " << endl;
+
+    out << "The inputted equation is : ";
+
+    for (int i = 0; i <= n; i++)
+    {
+        if (eqn[i] == 0)
+            continue;
+        if (i != 0 && eqn[i] > 0)
+            out << " + ";
+        if (eqn[i] < 0)
+            out << " - ";
+        out << abs(eqn[i]);
+        int deg = n - i;
+        if (deg > 0)
+            out << "x";
+        if (deg > 1)
+            out << "^" << deg;
+        if (i == n)
+            out << " = 0" << endl;
+    }
+
+    double xmax = sqrt((eqn[1] / eqn[0]) * (eqn[1] / eqn[0]) - 2 * (eqn[2] / eqn[0]));
+    double scanStart = -xmax, scanEnd = xmax;
+    vector<pair<double, double>> intervals;
+
+    double prev = scanStart;
+    for (double cur = scanStart + stepSize; cur <= scanEnd; cur += stepSize)
+    {
+        if (f(prev, eqn) * f(cur, eqn) < 0)
+        {
+            intervals.push_back({prev, cur});
+        }
+        prev = cur;
+    }
+
+    if (intervals.size() == 0)
+    {
+        out << "No initial guess found in this range" << endl;
+        in.close();
+        out.close();
+        return -1;
+    }
+
+    out << fixed << setprecision(3);
+    for (int i = 0; i < intervals.size(); i++)
+    {
+        double x1 = intervals[i].first;
+        double x2 = intervals[i].second;
+        double x0, f0, f1, f2;
+        int step = 0;
+        out << "Bracket for root " << i + 1 << " : [" << x1 << ", " << x2 << "]" << endl;
+        do
+        {
+            f1 = f(x1, eqn);
+            f2 = f(x2, eqn);
+            x0 = (x1 + x2) / 2;
+            f0 = f(x0, eqn);
+            if (f1 * f0 < 0)
+                x2 = x0;
+            else
+                x1 = x0;
+            step++;
+        } while (fabs(f0) > e && step < 1000);
+
+        out << "Iteration needed : " << step << endl;
+        out << "Root " << i + 1 << " : " << x0 << endl;
+        out << endl;
+    }
+    in.close();
+    out.close();
+    return 0;
+}
 ```
 
 #### Bisection Input
 
 ```
-[Add your input format here]
+4
+0.5 0.0001
+1 0 -5 0 4
+```
+
+##### Input Format
+
+```
+The input is read from a file named BiSection_input.txt.
+
+The first line contains an integer n (Degree of the polynomial equation).
+
+The second line contains two real numbers: stepSize (step size for scanning the interval) and e (tolerance or error limit).
+
+The third line contains n + 1 real numbers : Coefficients of the polynomial in descending order of degree.
 ```
 
 #### Bisection Output
 
 ```
-[Add your output format here]
+Bisection method :
+The inputted equation is : 1x^4 - 5x^2 + 4 = 0
+Bracket for root 1 : [-2.162, -1.662]
+Iteration needed : 15
+Root 1 : -2.000
+
+Bracket for root 2 : [-1.162, -0.662]
+Iteration needed : 13
+Root 2 : -1.000
+
+Bracket for root 3 : [0.838, 1.338]
+Iteration needed : 13
+Root 3 : 1.000
+
+Bracket for root 4 : [1.838, 2.338]
+Iteration needed : 15
+Root 4 : 2.000
+
+
+```
+
+##### Output Format:
+
+```
+The output is written to a file named BiSection_output.txt.
+
+The name of method is printed.
+
+The given polynomial equation is printed at first.
+
+For each detected root, the program prints:
+
+The bracketing interval where a root exists
+
+Number of iterations required to approximate the root.
+
+The approximated root value
+
+A blank line after each root
+
+All floating-point values are printed with 3 decimal places.
 ```
 
 ---
 
 ### False Position Method
+
+Implemented by 2207007
 
 #### False Position Theory
 
@@ -830,13 +1257,123 @@ No solution
 #### False Position Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x, const vector<double>& a) {
+    int n = a.size() - 1;
+    double res = 0;
+    for (int i = 0; i <= n; i++)
+        res += a[i] * pow(x, n - i);
+    return res;
+}
+// Override the func to change function
+pair<double,int> falsePos(double l, double r, const vector<double>& a,
+                          double eps, int maxIt = 1000) {
+    if (f(l,a) * f(r,a) >= 0) return {0.0, 0};
+
+    double x = l;
+    int it = 0;
+
+    while (it < maxIt && fabs(r - l) > eps) {
+        it++;
+        double fl = f(l,a), fr = f(r,a);
+        x = r - fr * (r - l) / (fr - fl);
+        double fx = f(x,a);
+
+        if (fl * fx < 0) r = x;
+        else l = x;
+    }
+    return {x, it};
+}
+
+vector<pair<double,double>> findBrackets(const vector<double>& a,
+                                         double xmin, double xmax, double h) {
+    vector<pair<double,double>> b;
+    for (double x = xmin; x < xmax; x += h) {
+        if (f(x,a) * f(x + h,a) < 0)
+            b.push_back({x, x + h});
+    }
+    return b;
+}
+
+void printEqn(ofstream &out, const vector<double> &coff) {
+    int n = coff.size() - 1;
+    out<<"Equation:\n";
+    for (int i = 0; i <= n; i++) {
+        if (coff[i] == 0) continue;
+
+        if (i != 0 && coff[i] > 0) out << " + ";
+        if (coff[i] < 0) out << " - ";
+
+        int c = abs(coff[i]);
+        if (c != 1 || n - i == 0) out << c;
+
+        if (n - i > 0) {
+            out << "x";
+            if (n - i > 1) out << "^" << (n - i);
+        }
+    }
+    out << endl;
+}
+
+
+int main() {
+    ifstream in("FalsePositionIn.txt");
+    ofstream out("FalsePositionOut.txt");
+    if (!in || !out) return 1;
+
+    int n;
+    in >> n;
+    vector<double> a(n);
+    for (int i = 0; i < n; i++) in >> a[i];
+
+    double step, eps;
+    in >> step >> eps;
+
+    double xmax = sqrt(pow(a[1]/a[0], 2) - 2*(a[2]/a[0]));
+    double xmin = -xmax;
+
+    auto brackets = findBrackets(a, xmin, xmax, step);
+    printEqn(out, a);
+    out << fixed << setprecision(4);
+    out << "Root      Iter   Bracket\n";
+    out << "------------------------------\n";
+    cout<<"Output in FalsePositionOut.txt";
+
+    for (auto &br : brackets) {
+        auto res = falsePos(br.first, br.second, a, eps);
+        out << setw(8) << res.first
+            << setw(8) << res.second
+            << "   [" << br.first << ", " << br.second << "]\n";
+    }
+
+    return 0;
+}
 ```
 
 #### False Position Input
 
 ```
-[Add your input format here]
+5
+1 0 -5 0 4
+0.5 0.0001
+```
+
+##### Input Format:
+
+```
+The input is read from a file named FalsePositionIn.txt.
+
+The inputs are taken as
+
+n → Number of coefficients of the polynomial (degree + 1)
+
+a0 a1 a2 ... an → Coefficients of the polynomial in descending order
+
+step → Step size for scanning the interval to find initial brackets
+
+eps → Convergence tolerance for the root
 ```
 
 #### False Position Output
@@ -845,9 +1382,38 @@ No solution
 [Add your output format here]
 ```
 
+##### Output Format
+
+```
+The output is written to a file named FalsePositionOut.txt.
+
+The polynomial equation is printed.
+
+For each bracket (interval) where the function changes sign, the program prints:
+
+Root
+
+Number of iterations needed
+
+The bracket [l, r]
+
+The output is formatted in a table with columns:
+
+Root      Iter   Bracket
+------------------------------
+x1        iter1  [l1, r1]
+x2        iter2  [l2, r2]
+...
+
+
+All numerical values are printed with 4 decimal places.
+```
+
 ---
 
 ### Secant Method
+
+Implemented by 2207007
 
 #### Secant Theory
 
@@ -856,24 +1422,105 @@ No solution
 #### Secant Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x) {
+    return x*x - 4.0;
+}
+
+double df(double x) {
+    return 2.0*x;
+}
+double secant(double x_n, double x_n1, double epsilon, int max_iteration) {
+    double x_n2;
+    for (int i = 0; i < max_iteration; i++) {
+        x_n2 = x_n1 - ((x_n1 - x_n) / (f(x_n1) - f(x_n))) * f(x_n1);
+        if (abs(x_n2 - x_n1) < epsilon) {
+            return x_n2;
+        }
+        x_n = x_n1;
+        x_n1 = x_n2;
+    }
+    return NAN;
+}
+
+int main() {
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    double range_start, range_end, step, epsilon;
+    int max_iteration;
+    fin >> range_start >> range_end >> step >> epsilon >> max_iteration;
+
+    vector<double> raphson_points;
+    vector<pair<double, double>> secant_pairs;
+
+    for (double i = range_start; i < range_end; i += step) {
+        if (f(i) * f(i + step) < 0) {
+            raphson_points.push_back(i + step / 2);
+            secant_pairs.push_back({i, i + step});
+        }
+    }
+    if (raphson_points.size() == 0) {
+        raphson_points.push_back(0.5);
+    }
+
+    for (auto pr : secant_pairs) {
+        double root = secant(pr.first, pr.second, epsilon, max_iteration);
+        fout << "Root using Secant: " << root << endl;
+    }
+
+    fin.close();
+    fout.close();
+    return 0;
+}
 ```
 
 #### Secant Input
 
 ```
-[Add your input format here]
+-5 5 0.1 1e-7 100000
+```
+
+##### Input Format
+
+```
+The input is read from a file named input.txt. It contains:
+
+range_start → Start of the interval to scan for roots
+
+range_end → End of the interval
+
+step → Step size for scanning the interval to detect brackets
+
+epsilon → Tolerance for the root
+
+max_iteration → Maximum number of iterations allowed
 ```
 
 #### Secant Output
 
 ```
-[Add your output format here]
+Root using Secant: -2
+Root using Secant: 2
+```
+
+##### Output Format
+
+```
+The output is written to a file named output.txt.
+
+For each detected interval where the function changes sign, the program prints the root calculated using the Secant Method:
+
+Root using Secant: value
 ```
 
 ---
 
 ### Newton-Raphson Method
+
+Implemented by 2207007
 
 #### Newton-Raphson Theory
 
@@ -882,19 +1529,98 @@ No solution
 #### Newton-Raphson Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x) {
+    return x*x - 4.0;
+}
+
+double df(double x) {
+    return 2.0*x;
+}
+
+double NewtonRaphson(double x_n, double epsilon, int max_iteration) {
+    double x_n1;
+    for (int i = 0; i < max_iteration; i++) {
+        x_n1 = x_n - (f(x_n) / df(x_n));
+        if (abs(x_n1 - x_n) < epsilon) {
+            return x_n1;
+        }
+        x_n = x_n1;
+    }
+    return NAN;
+}
+
+int main() {
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    double range_start, range_end, step, epsilon;
+    int max_iteration;
+    fin >> range_start >> range_end >> step >> epsilon >> max_iteration;
+
+    vector<double> raphson_points;
+    vector<pair<double, double>> secant_pairs;
+
+    for (double i = range_start; i < range_end; i += step) {
+        if (f(i) * f(i + step) < 0) {
+            raphson_points.push_back(i + step / 2);
+            secant_pairs.push_back({i, i + step});
+        }
+    }
+    if (raphson_points.size() == 0) {
+        raphson_points.push_back(0.5);
+    }
+
+    for (double pt : raphson_points) {
+        double root = NewtonRaphson(pt, epsilon, max_iteration);
+        fout << "Root using Newton Raphson: " << root << endl;
+    }
+
+    fin.close();
+    fout.close();
+    return 0;
+}
 ```
 
 #### Newton-Raphson Input
 
 ```
-[Add your input format here]
+-5 5 0.1 1e-7 100000
+```
+
+##### Input Format
+
+```
+The input is read from a file named input.txt. It contains:
+
+range_start → Start of the interval to scan for roots
+
+range_end → End of the interval
+
+step → Step size for scanning the interval
+
+epsilon → Tolerance for the root
+
+max_iteration → Maximum number of iterations allowed
 ```
 
 #### Newton-Raphson Output
 
 ```
-[Add your output format here]
+Root using Newton Raphson: -2
+Root using Newton Raphson: 2
+```
+
+##### Output Format
+
+```
+The output is written to a file named output.txt.
+
+For each initial guess detected within the interval, the program prints the root calculated using the Newton-Raphson method:
+
+Root using Newton Raphson: value
 ```
 
 ---
@@ -903,26 +1629,145 @@ No solution
 
 ### Runge-Kutta Method
 
+Implemented by 2207008
+
 #### Runge-Kutta Theory
 
-[Add your theory content here]
+The Runge-Kutta 4th Order (RK4) method is a numerical technique to approximate the solution of a first-order ordinary differential equation (ODE) which is of the the form: dy/dx = f(x, y), y(x0) = y0. It provies a good balance between accuracy and computational efficiency.<br>
+
+Algorithm:
+
+1. Given a initial value of x --> x0 and y --> y0.
+2. Given a step size h, the value of y at the next point is computed using four intermediate slopes: <br>
+   k1 = h _ f(xn, yn)<br>
+   k2 = h _ f(xn + h/2. yn + k1/2)<br>
+   k3 = h _ f(xn + h/2, yn + k2/2)<br>
+   k4 = h _ f(xn + h, y0 + k3)
+3. The next value of y is then calculated as:<br>
+   yn+1 = yn + (k1 + 2 _ k2 + 2 _ k3 + k4) / 6
 
 #### Runge-Kutta Code
 
 ```python
-# Add your code here
+// RK_Method implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x, double y)
+{
+    return 2 * x + 1;
+}
+
+int main()
+{
+    ifstream in("RK_input.txt");
+    ofstream out("RK_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    double x0, y0, xn, yn, h;
+    in >> x0 >> y0; // Initial values x0 and y0
+    in >> xn;       // Final values of x
+    in >> h;        // Step size
+
+    if (h <= 0)
+    {
+        cout << "Step size h must be positive!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    if (xn <= x0)
+    {
+        cout << "xn must be greater than x0!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    int steps = floor((xn - x0) / h);
+
+    if (steps == 0)
+    {
+        cout << "Step size is too large for the given range!" << endl;
+        return 1;
+    }
+
+    out << fixed << setprecision(3);
+    yn = y0;
+
+    out << "RK4 Method: " << endl;
+    for (int i = 1; i <= steps; i++)
+    {
+        double k1 = h * f(x0, y0);
+        double k2 = h * f(x0 + h / 2, y0 + k1 / 2);
+        double k3 = h * f(x0 + h / 2, y0 + k2 / 2);
+        double k4 = h * f(x0 + h, y0 + k3);
+        yn = y0 + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+        x0 = x0 + h;
+        y0 = yn;
+        out << "Step " << i << ": x = " << x0 << "  y = " << y0 << endl;
+    }
+
+    out << "\nFinal Result: yn = " << yn << endl;
+    in.close();
+    out.close();
+
+    return 0;
+}
 ```
 
 #### Runge-Kutta Input
 
 ```
-[Add your input format here]
+0 1
+0.2
+0.1
+```
+
+##### Input Format
+
+```
+The input is read from a file named RK_input.txt.
+
+The first line contains two real numbers: x0 (initial value of the independent variable) and y0 (initial value of the dependent variable)
+
+The second line contains a real number: xn (final value of x)
+
+The third line contains a real number: h (step size)
 ```
 
 #### Runge-Kutta Output
 
 ```
-[Add your output format here]
+RK4 Method:
+Step 1: x = 0.100  y = 1.110
+Step 2: x = 0.200  y = 1.240
+
+Final Result: yn = 1.240
+
+```
+
+##### Output Format
+
+```
+The output is written to a file named RK_output.txt.
+
+At first the method name is printed.
+
+For each step, the updated values of x and y are displayed.
+
+Finally, the computed value of y at x = xn is printed.
+
+All numerical values are printed with 3 decimal places.
 ```
 
 ---
