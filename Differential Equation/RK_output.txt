@@ -1,0 +1,5 @@
+RK4 Method: 
+Step 1: x = 0.100  y = 1.110
+Step 2: x = 0.200  y = 1.240
+
+Final Result: yn = 1.240
