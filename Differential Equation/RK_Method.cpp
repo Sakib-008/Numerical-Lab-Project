@@ -16,6 +16,8 @@ int main()
     if (!in || !out)
     {
         cout << "Error opening input/output file!" << endl;
+        in.close();
+        out.close();
         return 1;
     }
 
@@ -27,12 +29,16 @@ int main()
     if (h <= 0)
     {
         cout << "Step size h must be positive!" << endl;
+        in.close();
+        out.close();
         return 1;
     }
 
     if (xn <= x0)
     {
         cout << "xn must be greater than x0!" << endl;
+        in.close();
+        out.close();
         return 1;
     }
 
