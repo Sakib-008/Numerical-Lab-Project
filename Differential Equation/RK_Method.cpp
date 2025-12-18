@@ -1,4 +1,4 @@
-//RK_Method implemented by 2207008
+// RK_Method implemented by 2207008
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -12,6 +12,12 @@ int main()
 {
     ifstream in("RK_input.txt");
     ofstream out("RK_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        return 1;
+    }
 
     double x0, y0, xn, yn, h;
     in >> x0 >> y0; // Initial values x0 and y0
@@ -30,7 +36,7 @@ int main()
         return 1;
     }
 
-    int steps = (xn - x0) / h;
+    int steps = floor((xn - x0) / h);
 
     if (steps == 0)
     {
@@ -39,6 +45,7 @@ int main()
     }
 
     out << fixed << setprecision(3);
+    yn = y0;
 
     out << "RK4 Method: " << endl;
     for (int i = 1; i <= steps; i++)
@@ -54,5 +61,8 @@ int main()
     }
 
     out << "\nFinal Result: yn = " << yn << endl;
+    in.close();
+    out.close();
+
     return 0;
 }
