@@ -1473,12 +1473,12 @@ Algorithm:
 
 1. Given a initial value of x --> x0 and y --> y0.
 2. Given a step size h, the value of y at the next point is computed using four intermediate slopes: <br>
-   k1 = h _ f(xn, yn)<br>
-   k2 = h _ f(xn + h/2. yn + k1/2)<br>
-   k3 = h _ f(xn + h/2, yn + k2/2)<br>
-   k4 = h _ f(xn + h, y0 + k3)
+   k1 = h * f(xn, yn)<br>
+   k2 = h * f(xn + h/2. yn + k1/2)<br>
+   k3 = h * f(xn + h/2, yn + k2/2)<br>
+   k4 = h * f(xn + h, y0 + k3)
 3. The next value of y is then calculated as:<br>
-   yn+1 = yn + (k1 + 2 _ k2 + 2 _ k3 + k4) / 6
+   yn+1 = yn + (k1 + 2 * k2 + 2 * k3 + k4) / 6
 
 #### Runge-Kutta Code
 
