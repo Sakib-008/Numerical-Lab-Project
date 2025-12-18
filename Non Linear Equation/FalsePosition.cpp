@@ -38,6 +38,27 @@ vector<pair<double,double>> findBrackets(const vector<double>& a,
     return b;
 }
 
+void printEqn(ofstream &out, const vector<double> &coff) {
+    int n = coff.size() - 1;
+    out<<"Equation:\n";
+    for (int i = 0; i <= n; i++) {
+        if (coff[i] == 0) continue;
+
+        if (i != 0 && coff[i] > 0) out << " + ";
+        if (coff[i] < 0) out << " - ";
+
+        int c = abs(coff[i]);
+        if (c != 1 || n - i == 0) out << c;
+
+        if (n - i > 0) {
+            out << "x";
+            if (n - i > 1) out << "^" << (n - i);
+        }
+    }
+    out << endl;
+}
+
+
 int main() {
     ifstream in("FalsePositionIn.txt");
     ofstream out("FalsePositionOut.txt");
@@ -55,7 +76,7 @@ int main() {
     double xmin = -xmax;
 
     auto brackets = findBrackets(a, xmin, xmax, step);
-
+    printEqn(out, a);
     out << fixed << setprecision(4);
     out << "Root      Iter   Bracket\n";
     out << "------------------------------\n";
