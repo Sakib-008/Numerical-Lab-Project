@@ -1,0 +1,6 @@
+False Position Method
+Equation: 1x^4 + 10x^3 - 5x^2 + 4 = 0
+
+Root      Iterations  Bracket             
+----------------------------------------
+-0.610497 4           [-0.700000, -0.600000]

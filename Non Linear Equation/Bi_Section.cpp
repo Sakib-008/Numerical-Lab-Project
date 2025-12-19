@@ -17,8 +17,8 @@ double f(double x, vector<double> &v)
 
 int main()
 {
-    ifstream in("BiSection_input.txt");
-    ofstream out("BiSection_output.txt");
+    ifstream in("FB_input.txt");
+    ofstream out("FB_output.txt");
 
     if (!in || !out)
     {

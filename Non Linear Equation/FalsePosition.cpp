@@ -1,93 +1,98 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-double f(double x, const vector<double>& a) {
-    int n = a.size() - 1;
-    double res = 0;
-    for (int i = 0; i <= n; i++)
-        res += a[i] * pow(x, n - i);
-    return res;
-}
-// Override the func to change function
-pair<double,int> falsePos(double l, double r, const vector<double>& a,
-                          double eps, int maxIt = 1000) {
-    if (f(l,a) * f(r,a) >= 0) return {0.0, 0};
-
-    double x = l;
-    int it = 0;
-
-    while (it < maxIt && fabs(r - l) > eps) {
-        it++;
-        double fl = f(l,a), fr = f(r,a);
-        x = r - fr * (r - l) / (fr - fl);
-        double fx = f(x,a);
-
-        if (fl * fx < 0) r = x;
-        else l = x;
+double f(double x, vector<double> &v) {
+    double result = 0;
+    int n = v.size();
+    for (int i = 0; i < n; i++) {
+        int deg = n - i - 1;
+        result += v[i] * pow(x, deg);
     }
-    return {x, it};
+    return result;
 }
 
-vector<pair<double,double>> findBrackets(const vector<double>& a,
-                                         double xmin, double xmax, double h) {
-    vector<pair<double,double>> b;
-    for (double x = xmin; x < xmax; x += h) {
-        if (f(x,a) * f(x + h,a) < 0)
-            b.push_back({x, x + h});
-    }
-    return b;
-}
+// False Position for one bracket
+pair<double, int> falsePosition(double a, double b, vector<double> &eqn, double tol, int maxIt = 1000) {
+    double fa = f(a, eqn);
+    double fb = f(b, eqn);
+    if (fa * fb >= 0) return {0, 0};
 
-void printEqn(ofstream &out, const vector<double> &coff) {
-    int n = coff.size() - 1;
-    out<<"Equation:\n";
-    for (int i = 0; i <= n; i++) {
-        if (coff[i] == 0) continue;
+    double c = a;
+    int steps = 0;
+    while (steps < maxIt) {
+        c = b - fb * (b - a) / (fb - fa);
+        double fc = f(c, eqn);
 
-        if (i != 0 && coff[i] > 0) out << " + ";
-        if (coff[i] < 0) out << " - ";
+        steps++; // increment iteration
 
-        int c = abs(coff[i]);
-        if (c != 1 || n - i == 0) out << c;
+        if (fabs(fc) < tol) break;
 
-        if (n - i > 0) {
-            out << "x";
-            if (n - i > 1) out << "^" << (n - i);
+        if (fa * fc < 0) {
+            b = c;
+            fb = fc;
+        } else {
+            a = c;
+            fa = fc;
         }
     }
-    out << endl;
+    return {c, steps};
 }
 
-
 int main() {
-    ifstream in("FalsePositionIn.txt");
-    ofstream out("FalsePositionOut.txt");
+    ifstream in("FB_input.txt");
+    ofstream out("FB_output.txt");
+
     if (!in || !out) return 1;
 
     int n;
     in >> n;
-    vector<double> a(n);
-    for (int i = 0; i < n; i++) in >> a[i];
+    double stepSize, tol;
+    in >> stepSize >> tol;
 
-    double step, eps;
-    in >> step >> eps;
+    vector<double> eqn(n + 1);
+    for (int i = 0; i <= n; i++) in >> eqn[i];
 
-    double xmax = sqrt(pow(a[1]/a[0], 2) - 2*(a[2]/a[0]));
-    double xmin = -xmax;
+    out << "False Position Method\n";
+    out << "Equation: ";
+    for (int i = 0; i <= n; i++) {
+        if (eqn[i] == 0) continue;
+        if (i != 0 && eqn[i] > 0) out << " + ";
+        if (eqn[i] < 0) out << " - ";
+        out << abs(eqn[i]);
+        int deg = n - i;
+        if (deg > 0) out << "x";
+        if (deg > 1) out << "^" << deg;
+    }
+    out << " = 0\n\n";
 
-    auto brackets = findBrackets(a, xmin, xmax, step);
-    printEqn(out, a);
-    out << fixed << setprecision(4);
-    out << "Root      Iter   Bracket\n";
-    out << "------------------------------\n";
-    cout<<"Output in FalsePositionOut.txt";
+    // Fixed scanning range
+    double scanStart = -10, scanEnd = 10;
+    vector<pair<double, double>> intervals;
 
-    for (auto &br : brackets) {
-        auto res = falsePos(br.first, br.second, a, eps);
-        out << setw(8) << res.first
-            << setw(8) << res.second
-            << "   [" << br.first << ", " << br.second << "]\n";
+    double prev = scanStart;
+    for (double cur = scanStart + stepSize; cur <= scanEnd; cur += stepSize) {
+        if (f(prev, eqn) * f(cur, eqn) < 0)
+            intervals.push_back({prev, cur});
+        prev = cur;
     }
 
+    if (intervals.empty()) {
+        out << "No brackets found in this range\n";
+        return 0;
+    }
+
+    out << left << setw(10) << "Root" 
+        << setw(12) << "Iterations" 
+        << setw(20) << "Bracket" << endl;
+    out << "----------------------------------------\n";
+
+    for (int i = 0; i < intervals.size(); i++) {
+        auto res = falsePosition(intervals[i].first, intervals[i].second, eqn, tol);
+        out << setw(10) << fixed << setprecision(6) << res.first
+            << setw(12) << res.second
+            << "[" << intervals[i].first << ", " << intervals[i].second << "]" << endl;
+    }
+
+    cout << "Output written to FB_output.txt\n";
     return 0;
 }
