@@ -1445,6 +1445,8 @@ All floating-point values are printed with 3 decimal places.
 
 ### False Position Method
 
+Implemented by 2207007
+
 #### False Position Theory
 
 [Add your theory content here]
@@ -1452,13 +1454,123 @@ All floating-point values are printed with 3 decimal places.
 #### False Position Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x, const vector<double>& a) {
+    int n = a.size() - 1;
+    double res = 0;
+    for (int i = 0; i <= n; i++)
+        res += a[i] * pow(x, n - i);
+    return res;
+}
+// Override the func to change function
+pair<double,int> falsePos(double l, double r, const vector<double>& a,
+                          double eps, int maxIt = 1000) {
+    if (f(l,a) * f(r,a) >= 0) return {0.0, 0};
+
+    double x = l;
+    int it = 0;
+
+    while (it < maxIt && fabs(r - l) > eps) {
+        it++;
+        double fl = f(l,a), fr = f(r,a);
+        x = r - fr * (r - l) / (fr - fl);
+        double fx = f(x,a);
+
+        if (fl * fx < 0) r = x;
+        else l = x;
+    }
+    return {x, it};
+}
+
+vector<pair<double,double>> findBrackets(const vector<double>& a,
+                                         double xmin, double xmax, double h) {
+    vector<pair<double,double>> b;
+    for (double x = xmin; x < xmax; x += h) {
+        if (f(x,a) * f(x + h,a) < 0)
+            b.push_back({x, x + h});
+    }
+    return b;
+}
+
+void printEqn(ofstream &out, const vector<double> &coff) {
+    int n = coff.size() - 1;
+    out<<"Equation:\n";
+    for (int i = 0; i <= n; i++) {
+        if (coff[i] == 0) continue;
+
+        if (i != 0 && coff[i] > 0) out << " + ";
+        if (coff[i] < 0) out << " - ";
+
+        int c = abs(coff[i]);
+        if (c != 1 || n - i == 0) out << c;
+
+        if (n - i > 0) {
+            out << "x";
+            if (n - i > 1) out << "^" << (n - i);
+        }
+    }
+    out << endl;
+}
+
+
+int main() {
+    ifstream in("FalsePositionIn.txt");
+    ofstream out("FalsePositionOut.txt");
+    if (!in || !out) return 1;
+
+    int n;
+    in >> n;
+    vector<double> a(n);
+    for (int i = 0; i < n; i++) in >> a[i];
+
+    double step, eps;
+    in >> step >> eps;
+
+    double xmax = sqrt(pow(a[1]/a[0], 2) - 2*(a[2]/a[0]));
+    double xmin = -xmax;
+
+    auto brackets = findBrackets(a, xmin, xmax, step);
+    printEqn(out, a);
+    out << fixed << setprecision(4);
+    out << "Root      Iter   Bracket\n";
+    out << "------------------------------\n";
+    cout<<"Output in FalsePositionOut.txt";
+
+    for (auto &br : brackets) {
+        auto res = falsePos(br.first, br.second, a, eps);
+        out << setw(8) << res.first
+            << setw(8) << res.second
+            << "   [" << br.first << ", " << br.second << "]\n";
+    }
+
+    return 0;
+}
 ```
 
 #### False Position Input
 
 ```
-[Add your input format here]
+5
+1 0 -5 0 4
+0.5 0.0001
+```
+
+##### Input Format:
+
+```
+The input is read from a file named FalsePositionIn.txt.
+
+The inputs are taken as
+
+n → Number of coefficients of the polynomial (degree + 1)
+
+a0 a1 a2 ... an → Coefficients of the polynomial in descending order
+
+step → Step size for scanning the interval to find initial brackets
+
+eps → Convergence tolerance for the root
 ```
 
 #### False Position Output
@@ -1467,9 +1579,38 @@ All floating-point values are printed with 3 decimal places.
 [Add your output format here]
 ```
 
+##### Output Format
+
+```
+The output is written to a file named FalsePositionOut.txt.
+
+The polynomial equation is printed.
+
+For each bracket (interval) where the function changes sign, the program prints:
+
+Root
+
+Number of iterations needed
+
+The bracket [l, r]
+
+The output is formatted in a table with columns:
+
+Root      Iter   Bracket
+------------------------------
+x1        iter1  [l1, r1]
+x2        iter2  [l2, r2]
+...
+
+
+All numerical values are printed with 4 decimal places.
+```
+
 ---
 
 ### Secant Method
+
+Implemented by 2207007
 
 #### Secant Theory
 
@@ -1478,24 +1619,105 @@ All floating-point values are printed with 3 decimal places.
 #### Secant Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x) {
+    return x*x - 4.0;
+}
+
+double df(double x) {
+    return 2.0*x;
+}
+double secant(double x_n, double x_n1, double epsilon, int max_iteration) {
+    double x_n2;
+    for (int i = 0; i < max_iteration; i++) {
+        x_n2 = x_n1 - ((x_n1 - x_n) / (f(x_n1) - f(x_n))) * f(x_n1);
+        if (abs(x_n2 - x_n1) < epsilon) {
+            return x_n2;
+        }
+        x_n = x_n1;
+        x_n1 = x_n2;
+    }
+    return NAN;
+}
+
+int main() {
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    double range_start, range_end, step, epsilon;
+    int max_iteration;
+    fin >> range_start >> range_end >> step >> epsilon >> max_iteration;
+
+    vector<double> raphson_points;
+    vector<pair<double, double>> secant_pairs;
+
+    for (double i = range_start; i < range_end; i += step) {
+        if (f(i) * f(i + step) < 0) {
+            raphson_points.push_back(i + step / 2);
+            secant_pairs.push_back({i, i + step});
+        }
+    }
+    if (raphson_points.size() == 0) {
+        raphson_points.push_back(0.5);
+    }
+
+    for (auto pr : secant_pairs) {
+        double root = secant(pr.first, pr.second, epsilon, max_iteration);
+        fout << "Root using Secant: " << root << endl;
+    }
+
+    fin.close();
+    fout.close();
+    return 0;
+}
 ```
 
 #### Secant Input
 
 ```
-[Add your input format here]
+-5 5 0.1 1e-7 100000
+```
+
+##### Input Format
+
+```
+The input is read from a file named input.txt. It contains:
+
+range_start → Start of the interval to scan for roots
+
+range_end → End of the interval
+
+step → Step size for scanning the interval to detect brackets
+
+epsilon → Tolerance for the root
+
+max_iteration → Maximum number of iterations allowed
 ```
 
 #### Secant Output
 
 ```
-[Add your output format here]
+Root using Secant: -2
+Root using Secant: 2
+```
+
+##### Output Format
+
+```
+The output is written to a file named output.txt.
+
+For each detected interval where the function changes sign, the program prints the root calculated using the Secant Method:
+
+Root using Secant: value
 ```
 
 ---
 
 ### Newton-Raphson Method
+
+Implemented by 2207007
 
 #### Newton-Raphson Theory
 
@@ -1504,19 +1726,98 @@ All floating-point values are printed with 3 decimal places.
 #### Newton-Raphson Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+using namespace std;
+
+double f(double x) {
+    return x*x - 4.0;
+}
+
+double df(double x) {
+    return 2.0*x;
+}
+
+double NewtonRaphson(double x_n, double epsilon, int max_iteration) {
+    double x_n1;
+    for (int i = 0; i < max_iteration; i++) {
+        x_n1 = x_n - (f(x_n) / df(x_n));
+        if (abs(x_n1 - x_n) < epsilon) {
+            return x_n1;
+        }
+        x_n = x_n1;
+    }
+    return NAN;
+}
+
+int main() {
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    double range_start, range_end, step, epsilon;
+    int max_iteration;
+    fin >> range_start >> range_end >> step >> epsilon >> max_iteration;
+
+    vector<double> raphson_points;
+    vector<pair<double, double>> secant_pairs;
+
+    for (double i = range_start; i < range_end; i += step) {
+        if (f(i) * f(i + step) < 0) {
+            raphson_points.push_back(i + step / 2);
+            secant_pairs.push_back({i, i + step});
+        }
+    }
+    if (raphson_points.size() == 0) {
+        raphson_points.push_back(0.5);
+    }
+
+    for (double pt : raphson_points) {
+        double root = NewtonRaphson(pt, epsilon, max_iteration);
+        fout << "Root using Newton Raphson: " << root << endl;
+    }
+
+    fin.close();
+    fout.close();
+    return 0;
+}
 ```
 
 #### Newton-Raphson Input
 
 ```
-[Add your input format here]
+-5 5 0.1 1e-7 100000
+```
+
+##### Input Format
+
+```
+The input is read from a file named input.txt. It contains:
+
+range_start → Start of the interval to scan for roots
+
+range_end → End of the interval
+
+step → Step size for scanning the interval
+
+epsilon → Tolerance for the root
+
+max_iteration → Maximum number of iterations allowed
 ```
 
 #### Newton-Raphson Output
 
 ```
-[Add your output format here]
+Root using Newton Raphson: -2
+Root using Newton Raphson: 2
+```
+
+##### Output Format
+
+```
+The output is written to a file named output.txt.
+
+For each initial guess detected within the interval, the program prints the root calculated using the Newton-Raphson method:
+
+Root using Newton Raphson: value
 ```
 
 ---
@@ -1554,6 +1855,90 @@ double f(double x, double y)
 {
     return 2 * x + 1;
 }
+
+int main()
+{
+    ifstream in("RK_input.txt");
+    ofstream out("RK_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    double x0, y0, xn, yn, h;
+    in >> x0 >> y0; // Initial values x0 and y0
+    in >> xn;       // Final values of x
+    in >> h;        // Step size
+
+    if (h <= 0)
+    {
+        cout << "Step size h must be positive!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    if (xn <= x0)
+    {
+        cout << "xn must be greater than x0!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    int steps = floor((xn - x0) / h);
+
+    if (steps == 0)
+    {
+        cout << "Step size is too large for the given range!" << endl;
+        return 1;
+    }
+
+    out << fixed << setprecision(3);
+    yn = y0;
+
+    out << "RK4 Method: " << endl;
+    for (int i = 1; i <= steps; i++)
+    {
+        double k1 = h * f(x0, y0);
+        double k2 = h * f(x0 + h / 2, y0 + k1 / 2);
+        double k3 = h * f(x0 + h / 2, y0 + k2 / 2);
+        double k4 = h * f(x0 + h, y0 + k3);
+        yn = y0 + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+        x0 = x0 + h;
+        y0 = yn;
+        out << "Step " << i << ": x = " << x0 << "  y = " << y0 << endl;
+    }
+
+    out << "\nFinal Result: yn = " << yn << endl;
+    in.close();
+    out.close();
+
+    return 0;
+}
+```
+
+```
+0 1
+0.2
+0.1
+```
+
+##### Input Format
+
+```
+The input is read from a file named RK_input.txt.
+
+The first line contains two real numbers: x0 (initial value of the independent variable) and y0 (initial value of the dependent variable)
+
+The second line contains a real number: xn (final value of x)
+
+The third line contains a real number: h (step size)
+```
 
 int main()
 {
@@ -2039,7 +2424,26 @@ All numerical values are printed with 3 decimal places.
 ##### Output Format
 
 ```
-[Add your output format here]
+RK4 Method:
+Step 1: x = 0.100  y = 1.110
+Step 2: x = 0.200  y = 1.240
+
+Final Result: yn = 1.240
+
+```
+
+##### Output Format
+
+```
+The output is written to a file named RK_output.txt.
+
+At first the method name is printed.
+
+For each step, the updated values of x and y are displayed.
+
+Finally, the computed value of y at x = xn is printed.
+
+All numerical values are printed with 3 decimal places.
 ```
 
 ---
