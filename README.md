@@ -1249,7 +1249,8 @@ Implemented by 2207008
 #### Bisection Theory
 
 The Bisection Method is a numerical method used to approximate a real root of a nonlinear equation of the form: f(x) = 0. It is also called Binary chopping or half-interval method. It is a braketing method which states that if a continuous function f(x) gives opposite signs at two points a and b, then at least one real root exists in the interval (a,b).<br>
-Algorithm:<br>
+
+Algorithm:
 
 1. Let x1 = a and x2 = b. Define x0 as the midpoint between a and b. x0 = (x1 + x2) / 2.
 2. Evaluate f(x0), f(x1), f(x2).
@@ -2201,145 +2202,584 @@ All numerical values are printed with 3 decimal places.
 ### Interpolation and Approximation
 
 ### Newton's Forward Interpolation
+Implemented by 2207008
 
 #### Newton's Forward Interpolation Theory
+Newton’s Forward Interpolation is used to approximate the value of a function at a point X using a set of equally spaced data points. This method is used when the interpolation point is near the begining of the given data points. The method constructs a forward difference table from the given data points. It is calculated by repeatedly subtracting each element from the one below it in the previous column, starting with the y-values in the first column. Then the method uses the table and computes the interpolated value with the formula : <br>
+y = y<sub>0</sub> 
+    + u Δy<sub>0</sub> 
+    + (u(u-1)/2!) Δ<sup>2</sup>y<sub>0</sub> 
+    + (u(u-1)(u-2)/3!) Δ<sup>3</sup>y<sub>0</sub> 
+    + ... 
+    + (u(u-1)(u-2)...(u-n+1)/n!) Δ<sup>n</sup>y<sub>0</sub><br>
+Here u = (X - x<sub>0</sub>)/h and h = x<sub>1</sub> - x<sub>0</sub>
 
-[Add your theory content here]
+
+Algorithm:
+
+1. Given the number of data data point and the data points (x, y). 
+2. Check if the x-values are equally spaced. If not, then the interpolation is not possible with this method.
+3. Read the data point X to interpolate on
+4. Compute the forward difference table.
+5. Compute u and h.
+6. Use the formula above to calculate the interpolated value. <br>
+
 
 #### Newton's Forward Interpolation Code
 
 ```python
-# Add your code here
+// Implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void printDifferenceTable(const vector<vector<double>> &d, int n, ofstream &out)
+{
+    out << "\nForward Difference Table:" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n - i; j++)
+        {
+            out << setw(10) << d[i][j] << " ";
+        }
+        out << endl;
+    }
+}
+
+int main()  
+{
+    ifstream in("ForwardInterpolation_input.txt");
+    ofstream out("ForwardInterpolation_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        return 1;
+    }
+
+    int n; // Number of data points
+    in >> n;
+    vector<double> x(n), y(n);
+    for (int i = 0; i < n; i++)
+        in >> x[i] >> y[i]; // Input data points (x, y)
+
+    double h = x[1] - x[0];
+
+    for (int i = 1; i < n - 1; i++)
+    {
+        if (fabs((x[i + 1] - x[i]) - h) > 1e-9)
+        {
+            out << "Error: x values are not equally spaced." << endl;
+            in.close();
+            out.close();
+            return 1;
+        }
+    }
+
+    double X; // Value of x to interpolate
+    in >> X;
+    vector<vector<double>> d(n, vector<double>(n, 0));
+    for (int i = 0; i < n; i++)
+        d[i][0] = y[i];
+    for (int j = 1; j < n; j++)
+    {
+        for (int i = 0; i < n - j; i++)
+        {
+            d[i][j] = d[i + 1][j - 1] - d[i][j - 1];
+        }
+    }
+    double u = (X - x[0]) / h;
+    double p = 1.0;
+    double f = 1.0;
+    double ans = d[0][0];
+    for (int j = 1; j < n; j++)
+    {
+        p *= (u - (j - 1));
+        f *= j;
+        ans += (d[0][j] * p) / f;
+    }
+    out << "Newton's Forward Interpolation Method : " << endl;
+    printDifferenceTable(d, n, out);
+    out << fixed << setprecision(3);
+    out << "\nInterpolated answer : " << ans << endl;
+    in.close();
+    out.close();
+    return 0;
+}
+
 ```
 
 #### Newton's Forward Interpolation Input
 
 ```
-[Add your input here]
+4
+3 180
+5 150
+7 120
+9 90
+4
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is read from a file named ForwardInterpolation_input.txt.
+
+The first line contains an integer n (Number of data points).
+
+The next n lines each contain two real numbers: xi yi (the data points), where xi are equally spaced.
+
+The last line contains a real number X, the value at which interpolation is needed.
+
 ```
 
 #### Newton's Forward Interpolation Output
 
 ```
-[Add your output here]
+Newton's Forward Interpolation Method : 
+
+Forward Difference Table:
+       180        -30          0          0 
+       150        -30          0 
+       120        -30 
+        90 
+
+Interpolated answer : 165.000
+
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named ForwardInterpolation_output.txt.
+
+The name of the method is printed first.
+
+Then the forward difference table is printed.
+
+Finally, the interpolated value at X is printed with 3 decimal places.
+
 ```
 
 ### Newton's Backward Interpolation
+Implemented by 2207008
 
 #### Newton's Backward Interpolation Theory
+Newton’s Backward Interpolation is used to approximate the value of a function at a point X using a set of equally spaced data points. This method is used when the interpolation point is near the end of the given data points. The method constructs a backward difference table from the given data points. It is calculated by repeatedly subtracting each element in the previous column from the element above it, starting with the y-values in the first column. Then the method uses the table and computes the interpolated value with the formula:<br>
+y = y<sub>n</sub> 
+    + v ∇y<sub>n</sub> 
+    + (v(v+1)/2!) ∇<sup>2</sup>y<sub>n</sub> 
+    + (v(v+1)(v+2)/3!) ∇<sup>3</sup>y<sub>n</sub> 
+    + ... 
+    + (v(v+1)(v+2)...(v+n-1)/n!) ∇<sup>n</sup>y<sub>n</sub><br>
+Here v = (X - x<sub>n</sub>)/h and h = x<sub>1</sub> - x<sub>0</sub>
 
-[Add your theory content here]
+
+Algorithm:
+
+1. Given the number of data points and the data points (x, y).
+2. Check if the x-values are equally spaced. If not, then interpolation is not possible with this method.
+3. Read the data point X to interpolate on.
+4. Compute the backward difference table.
+5. Compute u and h.
+6. Use the formula above to calculate the interpolated value.
 
 #### Newton's Backward Interpolation Code
 
 ```python
-# Add your code here
+// Implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void printDifferenceTable(const vector<vector<double>> &d, int n, ofstream &out)
+{
+    out << "\nBackward Difference Table:" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j <= i; j++)
+        {
+            out << setw(10) << d[i][j] << " ";
+        }
+        out << endl;
+    }
+}
+
+int main()
+{
+    ifstream in("BackwardInterpolation_input.txt");
+    ofstream out("BackwardInterpolation_output.txt");
+
+    if (!in || !out)
+    {
+        out << "Error opening input/output file!" << endl;
+        return 1;
+    }
+
+    int n;
+    in >> n; // Number of data points
+    vector<double> x(n), y(n);
+    for (int i = 0; i < n; i++)
+        in >> x[i] >> y[i]; // Input data points (x, y)
+
+    double h = x[1] - x[0];
+
+    for (int i = 1; i < n - 1; i++)
+    {
+        if (fabs((x[i + 1] - x[i]) - h) > 1e-9)
+        {
+            out << "Error: x values are not equally spaced." << endl;
+            in.close();
+            out.close();
+            return 1;
+        }
+    }
+
+    double X;
+    in >> X; // Value of x to interpolate
+    
+    vector<vector<double>> d(n, vector<double>(n, 0));
+    for (int i = 0; i < n; i++)
+        d[i][0] = y[i];
+    for (int j = 1; j < n; j++)
+    {
+        for (int i = n - 1; i >= j; i--)
+        {
+            d[i][j] = d[i][j - 1] - d[i - 1][j - 1];
+        }
+    }
+    double u = (X - x[n - 1]) / h;
+    double p = 1.0;
+    double f = 1.0;
+    double ans = d[n - 1][0];
+    for (int j = 1; j < n; j++)
+    {
+        p *= (u + (j - 1));
+        f *= j;
+        ans += (p * d[n - 1][j]) / f;
+    }
+    out << "Newton's Backward Interpolation Method : " << endl;
+    printDifferenceTable(d, n, out);
+    out << fixed << setprecision(3);
+    out << "\nInterpolated answer = " << ans << endl;
+    in.close();
+    out.close();
+    return 0;
+}
 ```
 
 #### Newton's Backward Interpolation Input
 
 ```
-[Add your input here]
+5
+24 28.06
+28 30.19
+32 32.75
+36 34.94
+40 40
+33
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is read from a file named BackwardInterpolation_input.txt.
+
+The first line contains an integer n (Number of data points).
+
+The next n lines each contain two real numbers: xi yi (the data points), where xi are equally spaced.
+
+The last line contains a real number X, the value at which interpolation is needed.
+
 ```
 
 #### Newton's Backward Interpolation Output
 
 ```
-[Add your output here]
+Newton's Backward Interpolation Method : 
+
+Difference Table:
+     28.06 
+     30.19       2.13 
+     32.75       2.56       0.43 
+     34.94       2.19      -0.37       -0.8 
+        40       5.06       2.87       3.24       4.04 
+
+Interpolated answer = 33.275
+
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named BackwardInterpolation_output.txt.
+
+The name of the method is printed first.
+
+Then the backward difference table is printed.
+
+Finally, the interpolated value at X is printed with 3 decimal places.
+
 ```
 
 ### Divided Difference Interpolation
 
 #### Divided Difference Interpolation Theory
 
-[Add your theory content here]
+Newton’s Divided Difference Interpolation is used to approximate the value of a function at a point X using a set of data points, which may be unequally spaced. The method constructs a divided difference table from the given data points. It is computed in the following method.<br>
+f[x<sub>i</sub>, x<sub>j</sub>] = (f(x<sub>i</sub>) - f(x<sub>j</sub>)) / (x<sub>i</sub> - x<sub>j</sub>)<br>
+f[x<sub>i</sub>, x<sub>j</sub>, x<sub>k</sub>] = (f[x<sub>i</sub>, x<sub>j</sub>] - f[x<sub>j</sub>, x<sub>k</sub>]) / (x<sub>i</sub> - x<sub>k</sub>)<br>
+f[x<sub>i</sub>, x<sub>j</sub>, x<sub>k</sub>, x<sub>l</sub>] = (f[x<sub>i</sub>, x<sub>j</sub>, x<sub>k</sub>] - f[x<sub>j</sub>, x<sub>k</sub>, x<sub>l</sub>]) / (x<sub>i</sub> - x<sub>l</sub>)<br>
+
+
+Then the interpolated value is calculated using the formula:<br>
+f(x<sub>n</sub>) = f(x<sub>0</sub>) 
+                  + (x - x<sub>0</sub>) f[x<sub>1</sub>, x<sub>0</sub>] 
+                  + (x - x<sub>0</sub>)(x - x<sub>1</sub>) f[x<sub>2</sub>, x<sub>1</sub>, x<sub>0</sub>] 
+                  + (x - x<sub>0</sub>)(x - x<sub>1</sub>)(x - x<sub>2</sub>) f[x<sub>3</sub>, x<sub>2</sub>, x<sub>1</sub>, x<sub>0</sub>] 
+                  + ... 
+                  + (x - x<sub>0</sub>)(x - x<sub>1</sub>)...(x - x<sub>n-1</sub>) f[x<sub>n</sub>, x<sub>n-1</sub>, ..., x<sub>0</sub>]<br>
+
+Algorithm:
+
+1. Read the number of data points and the data points (x, y).
+2. Read the value X to interpolate.
+3. Initialize the divided difference table with y-values in the first column.
+4. Compute higher-order divided differences using the formula above.
+5. Use the divided difference formula to compute the interpolated value at X.
 
 #### Divided Difference Interpolation Code
 
 ```python
-# Add your code here
+// Implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    ifstream in("DividedDifference_input.txt");
+    ofstream out("DividedDifference_output.txt");
+
+    if (!in || !out)
+    {
+        out << "Error opening input/output file!" << endl;
+        return 1;
+    }
+
+    int n;
+    in >> n; // Number of data points
+    vector<double> x(n), y(n);
+    for (int i = 0; i < n; i++)
+        in >> x[i] >> y[i]; // Input data points (x, y)
+
+    vector<vector<double>> d(n, vector<double>(n, 0));
+    for (int i = 0; i < n; i++)
+        d[i][0] = y[i];
+
+    for (int j = 1; j < n; j++)
+    {
+        for (int i = 0; i < n - j; i++)
+        {
+            d[i][j] = (d[i + 1][j - 1] - d[i][j - 1]) / (x[i + j] - x[i]);
+        }
+    }
+
+    double X;
+    in >> X; // Value of x to interpolate
+
+    double ans = d[0][0];
+    double p = 1.0;
+
+    for (int j = 1; j < n; j++)
+    {
+        p *= (X - x[j - 1]);
+        ans += p * d[0][j];
+    }
+    out << fixed << setprecision(6);
+    out << "Newton's Divided Difference Interpolation Method : " << endl;
+    out << "Interpolated value: " << ans << endl;
+    in.close();
+    out.close();
+    return 0;
+}
+
 ```
 
 #### Divided Difference Interpolation Input
 
 ```
-[Add your input here]
+4
+1 0
+4 1.386294
+6 1.79175
+5 1.609438
+2
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is read from a file named DividedDifference_input.txt.
+
+The first line contains an integer n (Number of data points).
+
+The next n lines each contain two real numbers: xi yi (the data points), which may be unequally spaced.
+
+The last line contains a real number X, the value at which interpolation is needed.
+
 ```
 
 #### Divided Difference Interpolation Output
 
 ```
-[Add your output here]
+Newton's Divided Difference Interpolation Method : 
+Interpolated value: 0.628762
+
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named DividedDifference_output.txt.
+
+The name of the method is printed first.
+
+Finally, the interpolated value at X is printed with 6 decimal places.
+
 ```
 
 ### Divided Difference Interpolation with Error
+Implemented by 2207008
 
 #### Divided Difference Interpolation with Error Theory
 
-[Add your theory content here]
+Newton’s Divided Difference Interpolation with error calculation is used to approximate the error. If an additional data point f(x<sub>n+1</sub>) is given then the truncation error can be approximated as : <br>
+R<sub>n</sub> ≅ f[x<sub>n+1</sub>, x<sub>n</sub>, x<sub>n-1</sub>, ..., x<sub>1</sub>, x<sub>0</sub>] (x - x<sub>0</sub>)(x - x<sub>1</sub>) ... (x - x<sub>n</sub>)<br>
+
+Algorithm:
+1. Read the number of data points n and the first n data points (x, y).
+2. Read the extra point for error estimation.
+3. Read the value X to interpolate.
+4. Initialize the divided difference table with y-values in the first column.
+5. Compute higher-order divided differences as before.
+6. Compute the interpolated value using the Newton divided difference formula.
+7. Compute the estimated error using the extra point with the above formula given above.
+
 
 #### Divided Difference Interpolation with Error Code
 
 ```python
-# Add your code here
+// Implemented by 2207008
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ifstream in("DividedDifferenceWithError_input.txt");
+    ofstream out("DividedDifferenceWithError_output.txt");
+    
+    if (!in || !out) {
+        out << "Error opening input/output file!" << endl;
+        return 1;
+    }
+
+    int n;
+    in >> n; // Number of data points (excluding extra point for error)
+
+    vector<double> x(n+1), y(n+1);
+    for (int i = 0; i < n; i++)
+        in >> x[i] >> y[i]; // Input first n data points (x, y)
+    in >> x[n] >> y[n];   // extra point for error term
+
+    double X;
+    in >> X; // Value of x to interpolate
+
+    vector<vector<double>> d(n+1, vector<double>(n+1, 0));
+
+    for (int i = 0; i <= n; i++)
+        d[i][0] = y[i];
+
+    for (int j = 1; j <= n; j++) {
+        for (int i = 0; i <= n - j; i++) {
+            d[i][j] = (d[i+1][j-1] - d[i][j-1]) / (x[i+j] - x[i]);
+        }
+    }
+
+    double ans = d[0][0];
+    double p = 1.0;
+
+    for (int j = 1; j < n; j++) {
+        p *= (X - x[j-1]);
+        ans += p * d[0][j];
+    }
+
+    out << fixed << setprecision(6);
+    out << "Newton's Divided Difference Interpolation Method for Calculating Error: " << endl;
+    out << "Interpolated value : " << ans << endl;
+
+    // Error estimation
+    double errP = 1.0;
+    for (int i = 0; i < n; i++)
+        errP *= (X - x[i]);
+    double error = fabs(errP * d[0][n]);
+    out << "Estimated error using the extra point: " << error << endl;
+    
+    return 0;
+}
+
 ```
 
 #### Divided Difference Interpolation with Error Input
 
 ```
-[Add your input here]
+3
+1 0
+4 1.386294
+6 1.79175
+5 1.609438
+2
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is read from a file named DividedDifferenceWithError_input.txt.
+
+The first line contains an integer n (Number of data points excluding extra point for error estimation).
+
+The next n lines each contain two real numbers: xi yi (the data points).
+
+The (n+1)-th line contains an extra point (x, y) used for error estimation.
+
+The last line contains a real number X, the value at which interpolation is needed.
+
 ```
 
 #### Divided Difference Interpolation with Error Output
 
 ```
-[Add your output here]
+Newton's Forward Interpolation Method : 
+
+Forward Difference Table:
+       180        -30          0          0 
+       150        -30          0 
+       120        -30 
+        90 
+
+Interpolated answer : 165.000
+
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named DividedDifferenceWithError_output.txt.
+
+The name of the method is printed first.
+
+Then the interpolated value at X is printed with 6 decimal places.
+
+Finally, the estimated error using the extra point is printed.
+
 ```
