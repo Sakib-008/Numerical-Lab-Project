@@ -2341,26 +2341,5 @@ All numerical values are printed with 3 decimal places.
 ##### Output Format
 
 ```
-RK4 Method:
-Step 1: x = 0.100  y = 1.110
-Step 2: x = 0.200  y = 1.240
-
-Final Result: yn = 1.240
-
+[Add your output format here]
 ```
-
-##### Output Format
-
-```
-The output is written to a file named RK_output.txt.
-
-At first the method name is printed.
-
-For each step, the updated values of x and y are displayed.
-
-Finally, the computed value of y at x = xn is printed.
-
-All numerical values are printed with 3 decimal places.
-```
-
----
