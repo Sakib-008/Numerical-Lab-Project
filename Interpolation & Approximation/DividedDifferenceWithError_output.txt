@@ -1,0 +1,3 @@
+Newton's Divided Difference Interpolation Method for Calculating Error: 
+Interpolated value : 0.565846
+Estimated error using the extra point: 0.062916
