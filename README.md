@@ -2092,36 +2092,140 @@ All numerical values are printed with 3 decimal places.
 
 #### Linear Equation Theory
 
-[Add your theory content here]
+Linear equation can be solved using curve fitting which is also known as linear regression. It is a numerical technique to find the best fit straight line that represents the relationship between two variables based on a given set of data points. The relationship between the variables is expressed in the form y=a+bx. Where a is the intercept and 𝑏 is the slope of the line. The values of a and b are determined using the least squares principle. When the best fit equation is obtained, it can be used to predict the value of the dependent variable (y) for any given value of the independent variable (x).
+
+​
+Formula:
+
+let, n is the number of data points. Then,
+
+b = n*∑xy−(∑x)(∑y)​ / n*∑x^2−(∑x)^2
+
+a = ∑y−b∑x / n
+
+Best fit Linear Equation is:
+
+y = a + bx
 
 #### Linear Equation Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// The linear equation format is: y=a+bx
+pair<double, double> Linear(ofstream &out, vector<double> x, vector<double> y, int newX)
+{
+  int n = x.size();
+  double Sx = 0, Sy = 0, Sxx = 0, Sxy = 0;
+  for (int i = 0; i < n; i++)
+  {
+    Sx += x[i];
+    Sy += y[i];
+    Sxx += x[i] * x[i];
+    Sxy += x[i] * y[i];
+  }
+  double b = (n * Sxy - Sx * Sy) / (n * Sxx - Sx * Sx);
+
+  double a = (Sy - b * Sx) / n;
+
+  out << "The Linear Equation is: " << endl;
+  out << "y = " << a << " + " << b << "x" << endl;
+
+  double newY = a + b * newX;
+
+  out << "For x = " << newX << ", the predicted value of y is: ";
+  out << newY << endl;
+
+  return {a, b};
+}
+
+int main(void)
+{
+  ifstream in("Input.txt");
+  ofstream out("LinearEquationOutput.txt");
+
+  int n;
+  in >> n;
+  vector<double> x(n), y(n);
+
+  for (int i = 0; i < n; i++)
+  {
+    in >> x[i] >> y[i];
+  }
+
+  out << setprecision(2) << fixed;
+
+  out << "Data points entered:" << endl;
+  for (int i = 0; i < n; i++)
+  {
+    out << "(" << x[i] << ", " << y[i] << ")\n";
+  }
+
+  int newX;
+  in >> newX;
+  Linear(out, x, y, newX);
+
+  in.close();
+  out.close();
+  return 0;
+}
 ```
 
 #### Linear Equation Input
 
 ```
-[Add your input here]
+7
+1 3
+2 4
+3 4
+4 5
+5 8
+6 9
+7 10
+8
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is taken from a file named Input.txt.
+
+The first line of input contains an integer n - the number of data points.
+
+The next n lines each contain two real numbers x and y - the coordinates of the data points.
+
+The last line of input contains an integer newX - for which the predicted value of y is to be calculated.
 ```
 
 #### Linear Equation Output
 
 ```
-[Add your output here]
+Data points entered:
+(1.00, 3.00)
+(2.00, 4.00)
+(3.00, 4.00)
+(4.00, 5.00)
+(5.00, 8.00)
+(6.00, 9.00)
+(7.00, 10.00)
+The Linear Equation is:
+y = 1.14 + 1.25x
+For x = 8, the predicted value of y is: 11.14
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named LinearEquationOutput.txt.
+
+All the entered data points are printed.
+
+Then the equation of the best fit straight line is printed in the form
+y = a + bx.
+
+Finally, the predicted value of y corresponding to x = newX is printed.
 ```
 
 ### Polynomial Equation
