@@ -2017,72 +2017,244 @@ All numerical values are printed with 3 decimal places.
 
 #### Simpson's one-third rule Theory
 
-[Add your theory content here]
+Simpson's 1/3 Rule is a numerical integration method used to approximate the definite integral of a function. It works by fitting parabolas (quadratic curves) through sets of three points and calculating the area under these parabolas.
+
+The method divides the interval `[a, b]` into an even number of subintervals and approximates the curve with parabolic segments, providing better accuracy than simpler methods like the Trapezoidal Rule.
+
+Algorithm:
+
+1. Divide the interval `[a, b]` into n equal subintervals (n must be even)
+2. Calculate the step size:
+   `h = (b - a) / n`
+3. Generate points:
+   `x_i = a + i · h` for `i = 0, 1, 2, ..., n`
+4. Evaluate the function at each point:
+   `f(x_0), f(x_1), f(x_2), ..., f(x_n)`
+5. Apply Simpson's 1/3 formula:
+   `I ≈ (h/3) · [f(x_0) + 4·Σf(x_odd) + 2·Σf(x_even) + f(x_n)]`
+
+   Where:
+
+   - `f(x_0)` and `f(x_n)` are the first and last terms
+   - `Σf(x_odd)` is the sum of function values at odd indices
+   - `Σf(x_even)` is the sum of function values at even indices (excluding endpoints)
+
+Simpson's 1/3 Rule provides excellent accuracy for smooth functions and requires an even number of intervals to work properly.
 
 #### Simpson's one-third rule Code
 
-```python
-# Add your code here
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+#define vd vector<double>
+
+ofstream fout;
+
+double func(double x)
+{
+    return sqrt(x);
+}
+
+void simpsonOneThird(double a, double b, double h)
+{
+    fout<<"Simpson's 1/3:\n";
+    int n = (b - a) / h;
+    vd x(n + 1), fx(n + 1);
+
+    for (int i = 0; i <= n; i++)
+    {
+        x[i] = a + i * h;
+        fx[i] = func(x[i]);
+    }
+
+    double res = 0;
+    for (int i = 0; i <= n; i++)
+    {
+        if (i == 0 || i == n)
+            res += fx[i];
+        else if (i % 2 != 0)
+            res += 4 * fx[i];
+        else
+            res += 2 * fx[i];
+    }
+
+    fout << res * (h / 3);
+}
+
+int main()
+{
+    // input format
+    //a b h
+    ifstream fin("input.txt");
+    fout.open("output.txt");
+
+    double a, b, n;
+    fin >> a >> b >> n;
+    double h = (b-a)/n;
+
+    simpsonOneThird(a, b, h);
+    cout<<"Output in output.txt";
+    fin.close();
+    fout.close();
+    return 0;
+}
+
 ```
 
 #### Simpson's one-third rule Input
 
 ```
-[Add your input here]
+0 4.5 90
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+a -> lower limit
+b -> upper limit
+n -> total steps(slices)
 ```
 
 #### Simpson's one-third rule Output
 
 ```
-[Add your output here]
+Simpson's 1/3:
+Result = 6.22222
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is printed rounded with 2 decimal numbers after the floating point
 ```
 
 ### Simpson's three-eighths rule rule
 
 #### Simpson's three-eighths rule Theory
 
-[Add your theory content here]
+Simpson's 3/8 Rule Theory
+
+Simpson's 3/8 Rule is a numerical integration method used to approximate the definite integral of a function. It works by fitting cubic curves (third-degree polynomials) through sets of four points and calculating the area under these curves.
+
+The method divides the interval `[a, b]` into subintervals where the number of intervals must be a multiple of 3, providing higher accuracy than Simpson's 1/3 Rule for certain functions.
+
+Algorithm:
+
+1. Divide the interval `[a, b]` into n equal subintervals (n must be a multiple of 3)
+
+2. Calculate the step size:
+   `h = (b - a) / n`
+
+3. Generate points:
+   `x_i = a + i · h` for `i = 0, 1, 2, ..., n`
+
+4. Evaluate the function at each point:
+   `f(x_0), f(x_1), f(x_2), ..., f(x_n)`
+
+5. Apply Simpson's 3/8 formula:
+   `I ≈ (3h/8) · [f(x_0) + 3·Σf(x_non-multiple-of-3) + 2·Σf(x_multiple-of-3) + f(x_n)]`
+
+   Where:
+
+   - `f(x_0)` and `f(x_n)` are the first and last terms
+   - `Σf(x_non-multiple-of-3)` is the sum of function values at indices not divisible by 3
+   - `Σf(x_multiple-of-3)` is the sum of function values at indices divisible by 3 (excluding endpoints)
+
+Simpson's 3/8 Rule is particularly useful when the number of intervals is a multiple of 3 and provides better accuracy for functions with higher-order derivatives.
 
 #### Simpson's three-eighths rule Code
 
-```python
-# Add your code here
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+#define vd vector<double>
+
+ofstream fout;
+
+double func(double x)
+{
+    return sqrt(x);
+}
+
+
+void simpsonThreeEight(double a, double b, double h)
+{
+    fout<<"Simpson's 3/8:\n";
+    int n = round((b - a) / h);
+    if (n % 3 != 0)
+    {
+        fout << "Error: n must be multiple of 3 for Simpson 3/8 rule\n";
+        return;
+    }
+
+    h = (b - a) / n;
+
+    vd x(n + 1), fx(n + 1);
+    for (int i = 0; i <= n; i++)
+    {
+        x[i] = a + i * h;
+        fx[i] = func(x[i]);
+    }
+
+    double res = fx[0] + fx[n];
+    for (int i = 1; i < n; i++)
+    {
+        if (i % 3 == 0)
+            res += 2 * fx[i];
+        else
+            res += 3 * fx[i];
+    }
+
+    fout << res * (3 * h / 8);
+}
+
+int main()
+{
+    // input format
+    //a b h
+    ifstream fin("input.txt");
+    fout.open("output.txt");
+
+    double a, b, n;
+    fin >> a >> b >> n;
+    double h = (b-a)/n;
+
+    simpsonThreeEight(a, b, h);
+    cout<<"Output in output.txt";
+    fin.close();
+    fout.close();
+    return 0;
+}
+
 ```
 
 #### Simpson's three-eighths rule Input
 
 ```
-[Add your input here]
+0 4.5 90
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+a -> lower limit
+b -> upper limit
+n -> total steps(slices)
 ```
 
 #### Simpson's three-eighths rule Output
 
 ```
-[Add your output here]
+Simpson's 3/8:
+6.36
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is printed rounded with 2 decimal numbers after the floating point
 ```
 
 ---

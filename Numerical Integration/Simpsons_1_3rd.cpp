@@ -33,7 +33,7 @@ void simpsonOneThird(double a, double b, double h)
             res += 2 * fx[i];
     }
 
-    fout << res * (h / 3);
+    fout <<"Result = "<<setprecision(3)<< res * (h / 3);
 }
 
 int main()

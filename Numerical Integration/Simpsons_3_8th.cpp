@@ -39,7 +39,7 @@ void simpsonThreeEight(double a, double b, double h)
             res += 3 * fx[i];
     }
 
-    fout << res * (3 * h / 8);
+    fout <<setprecision(3)<< res * (3 * h / 8);
 }
 
 int main()
