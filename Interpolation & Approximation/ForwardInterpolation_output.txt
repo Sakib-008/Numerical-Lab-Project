@@ -1,6 +1,6 @@
 Newton's Forward Interpolation Method : 
 
-Difference Table:
+Forward Difference Table:
        180        -30          0          0 
        150        -30          0 
        120        -30 

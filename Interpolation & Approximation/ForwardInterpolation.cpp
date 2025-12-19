@@ -5,7 +5,7 @@ using namespace std;
 
 void printDifferenceTable(const vector<vector<double>> &d, int n, ofstream &out)
 {
-    out << "\nDifference Table:" << endl;
+    out << "\nForward Difference Table:" << endl;
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n - i; j++)
@@ -16,7 +16,7 @@ void printDifferenceTable(const vector<vector<double>> &d, int n, ofstream &out)
     }
 }
 
-int main()
+int main()  
 {
     ifstream in("ForwardInterpolation_input.txt");
     ofstream out("ForwardInterpolation_output.txt");
