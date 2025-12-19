@@ -17,8 +17,8 @@ double f(double x, vector<double> &v)
 
 int main()
 {
-    ifstream in("BiSection_input.txt");
-    ofstream out("BiSection_output.txt");
+    ifstream in("FB_input.txt");
+    ofstream out("FB_output.txt");
 
     if (!in || !out)
     {
@@ -75,6 +75,8 @@ int main()
     if (intervals.size() == 0)
     {
         out << "No initial guess found in this range" << endl;
+        in.close();
+        out.close();
         return -1;
     }
 
@@ -97,12 +99,13 @@ int main()
             else
                 x1 = x0;
             step++;
-        } while (fabs(f0) > e && stepSize < 1000);
+        } while (fabs(f0) > e && step < 1000);
 
         out << "Iteration needed : " << step << endl;
         out << "Root " << i + 1 << " : " << x0 << endl;
-        out<<endl;
+        out << endl;
     }
-
+    in.close();
+    out.close();
     return 0;
 }

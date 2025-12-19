@@ -54,6 +54,68 @@
     - [Input](#runge-kutta-input)
     - [Output](#runge-kutta-output)
 
+- [Numerical Integration](#numerical-integration)
+
+  - [Simpson's one-third rule](#simpsons-one-third-rule)
+    - [Theory](#simpsons-one-third-rule-theory)
+    - [Code](#simpsons-one-third-rule-code)
+    - [Input](#simpsons-one-third-rule-input)
+    - [Output](#simpsons-one-third-rule-output)
+  - [Simpson's three-eighths rule](#simpsons-three-eighths-rule)
+    - [Theory](#simpsons-three-eighths-rule-theory)
+    - [Code](#simpsons-three-eighths-rule-code)
+    - [Input](#simpsons-three-eighths-rule-input)
+    - [Output](#simpsons-three-eighths-rule-output)
+
+- [Numerical Differentiation](#numerical-differentiation)
+
+  - [Differentiation](#differentiation)
+    - [Theory](#differentiation-theory)
+    - [Code](#differentiation-code)
+    - [Input](#differentiation-input)
+    - [Output](#differentiation-output)
+
+- [Curve Fitting Regression](#curve-fitting-regression)
+
+  - [Linear Equation](#linear-equation)
+    - [Theory](#linear-equation-theory)
+    - [Code](#linear-equation-code)
+    - [Input](#linear-equation-input)
+    - [Output](#linear-equation-output)
+  - [Polynomial Equation](#polynomial-equation)
+    - [Theory](#polynomial-equation-theory)
+    - [Code](#polynomial-equation-code)
+    - [Input](#polynomial-equation-input)
+    - [Output](#polynomial-equation-output)
+  - [Transcendental Equation](#transcendental-equation)
+    - [Theory](#transcendental-equation-theory)
+    - [Code](#transcendental-equation-code)
+    - [Input](#transcendental-equation-input)
+    - [Output](#transcendental-equation-output)
+
+- [Interpolation and Approximation](#interpolation-and-approximation)
+
+  - [Newton's Forward Interpolation](#newtons-forward-interpolation)
+    - [Theory](#newtons-forward-interpolation-theory)
+    - [Code](#newtons-forward-interpolation-code)
+    - [Input](#newtons-forward-interpolation-input)
+    - [Output](#newtons-forward-interpolation-output)
+  - [Newton's Backward Interpolation](#newtons-backward-interpolation)
+    - [Theory](#newtons-backward-interpolation-theory)
+    - [Code](#newtons-backward-interpolation-code)
+    - [Input](#newtons-backward-interpolation-input)
+    - [Output](#newtons-backward-interpolation-output)
+  - [Divided Difference Interpolation](#divided-difference-interpolation)
+    - [Theory](#divided-difference-interpolation-theory)
+    - [Code](#divided-difference-interpolation-code)
+    - [Input](#divided-difference-interpolation-input)
+    - [Output](#divided-difference-interpolation-output)
+  - [Divided Difference Interpolation with Error](#divided-difference-interpolation-with-error)
+    - [Theory](#divided-difference-interpolation-with-error-theory)
+    - [Code](#divided-difference-interpolation-with-error-code)
+    - [Input](#divided-difference-interpolation-with-error-input)
+    - [Output](#divided-difference-interpolation-with-error-output)
+
 ---
 
 ### Solution of Linear Equations
@@ -62,7 +124,15 @@
 
 #### Gauss Elimination Theory
 
-Gauss Elimination is a method to solve a system of linear equations by converting the matrix into Row Echelon Form using row operations. It solves the linear equations by using back substitution in the Row Echelon Form matrix.
+Gauss Elimination is a method to solve a system of linear equations by converting the matrix into Row Echelon Form using elementary row operations. In this method, the given system of equations is written in augmented matrix form [A | H]. Then, forward elimination is performed to the matrix which converts the matrix into an upper triangular (Row Echelon Form) matrix. In upper triangular matrix, all elements below the main diagonal are zero. After that, the values of the variables are computed using back substitution starting from the last equation in Row Echelon Form matrix.
+
+Algorithm:
+
+1. The system of linear equations is written in augmented matrix form.
+2. The first element of the first row is chosen as the pivot element.
+3. All elements below the pivot element are converted to zero using elementary row operations.
+4. Moving to the next row and next column, the forward elimination process is performed until the matrix converts into an upper triangular (row echelon form) matrix.
+5. Lastly, back substitution is used to find the solution of the linear equations.
 
 #### Gauss Elimination Code
 
@@ -234,6 +304,20 @@ int main(void)
 2 2 5
 ```
 
+##### Input Format
+
+```
+The input is taken from a file named GaussEliminationInput.txt.
+
+The first line of input contains an integer T - the number of test cases.
+
+For each test case:
+
+The first line contains an integer n - the number of equations.
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
+```
+
 #### Gauss Elimination Output
 
 ```
@@ -261,13 +345,43 @@ The system of equations are:
 No solution
 ```
 
+##### Output Format
+
+```
+The output is written to a file named GaussEliminationOutput.txt.
+
+For each test case, the program prints:
+
+The system of linear equations.
+
+Nature of the solution: (Unique solution, No solution, Infinite solutions)
+
+If the solution is unique, then print The Row Echelon Form Matrix.
+
+The solution vector.
+
+else If there is no solution, then print No solution.
+
+else If there is infinite solutions, then print Infinite solutions.
+
+All floating-point values are printed with 3 decimal places.
+```
+
 ---
 
 ### Gauss Jordan Elimination Method
 
 #### Gauss Jordan Theory
 
-Gauss Jordan Elimination is a method to solve a system of linear equations by converting the matrix into Reduced Row Echelon Form using row operations. The constant vector of the Reduced Row Echelon Form matrix is the solution of linear equations.
+The Gauss Jordan Elimination Method is used to solve a system of linear equations by using forward and backward elimination. In this method, the given system of equations is written in augmented matrix form [A | H]. Then, the matrix is converted into Reduced Row Echelon Form. That is, the diagonal elements of the matrix are made 1 and all other elements in each pivot column are made zero. After that, the solution is obtained from the constant vector part of the Reduced Row Echelon Form matrix.
+
+Algorithm:
+
+1. The system of linear equations is written in augmented matrix form.
+2. A pivot element is selected and made equal to 1 by dividing the entire row by the pivot element.
+3. All other elements in the pivot column made zero by using forward and backward elimination.
+4. Move to the next pivot position and repeat the process until the coefficient part of the matrix is converted into an identity matrix.
+5. The solution is obtained from the constant vector part of the matrix.
 
 #### Gauss Jordan Code
 
@@ -438,6 +552,20 @@ int main(void)
 2 2 5
 ```
 
+##### Input Format
+
+```
+The input is taken from a file named GaussJordanEliminationInput.txt.
+
+The first line of input contains an integer T - the number of test cases.
+
+For each test case:
+
+The first line contains an integer n - the number of equations.
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
+```
+
 #### Gauss Jordan Output
 
 ```
@@ -463,6 +591,28 @@ The system of equations are:
 1.000x1 + 1.000x2 = 2.000
 2.000x1 + 2.000x2 = 5.000
 No solution
+```
+
+##### Output Format
+
+```
+The output is written to a file named GaussJordanEliminationOutput.txt.
+
+For each test case, the program prints:
+
+The system of linear equations.
+
+Nature of the solution: (Unique solution, No solution, Infinite solutions)
+
+If the solution is unique, then print the Reduced Row Echelon Form Matrix.
+
+The solution vector.
+
+else If there is no solution, then print No solution.
+
+else If there is infinite solutions, then print Infinite solutions.
+
+All floating-point values are printed with 3 decimal places.
 ```
 
 ---
@@ -747,7 +897,16 @@ All floating-point values are printed with 3 decimal places.
 
 #### Matrix Inversion Theory
 
-Matrix Inversion Method solves the system of linear equations (AX = B) by finding the inverse matrix (A^-1) of the corresponding co-efficient matrix (A) of the system of linear equations. Then it determines the solution by multiplying the inverse matrix with the constant vector (X = A^-1 x B).
+The Matrix Inversion Method is used to solve a system of linear equations when the coefficient matrix is square and invertible. In this method, the inverse of the coefficient matrix is calculated and then multiplied with the constant matrix to determine the solution.
+
+Algorithm:
+
+1. The coefficients of the system of linear equations are written into matrix form.
+2. Check if the matrix is square and its determinant is non-zero.
+3. Determine the cofactor matrix of the coefficient matrix.
+4. Perform transpose operation to convert the cofactor matrix into adjoint matrix.
+5. Divide all the elements of the adjoint matrix by the determinant of the coefficient matrix to convert the adjoint matrix into inverse matrix.
+6. Multiply the inverse matrix with constant matrix to determine the solution of the system of equations.
 
 #### Matrix Inversion Code
 
@@ -1008,6 +1167,20 @@ int main(void)
 2 2 5
 ```
 
+##### Input Format
+
+```
+The input is taken from a file named MatrixInversionInput.txt.
+
+The first line of input contains an integer T - the number of test cases.
+
+For each test case:
+
+The first line contains an integer n - the number of equations.
+
+The next n lines each contain n + 1 real numbers (augmented matrix).
+```
+
 #### Matrix Inversion Output
 
 ```
@@ -1039,6 +1212,30 @@ The system of equations are:
 1.000x1 + 1.000x2 = 2.000
 2.000x1 + 2.000x2 = 5.000
 No solution
+```
+
+##### Output Format
+
+```
+The output is written to a file named MatrixInversionOutput.txt.
+
+For each test case, the program prints:
+
+The system of linear equations.
+
+The Transpose Matrix.
+
+The Inverse Matrix.
+
+Nature of the solution: (Unique solution, No solution, Infinite solutions)
+
+If the solution is unique, then print the solution vector.
+
+else If there is no solution, then print No solution.
+
+else If there is infinite solutions, then print Infinite solutions.
+
+All floating-point values are printed with 3 decimal places.
 ```
 
 ---
@@ -1639,12 +1836,12 @@ Algorithm:
 
 1. Given a initial value of x --> x0 and y --> y0.
 2. Given a step size h, the value of y at the next point is computed using four intermediate slopes: <br>
-   k1 = h _ f(xn, yn)<br>
-   k2 = h _ f(xn + h/2. yn + k1/2)<br>
-   k3 = h _ f(xn + h/2, yn + k2/2)<br>
-   k4 = h _ f(xn + h, y0 + k3)
+   k1 = h \* f(xn, yn)<br>
+   k2 = h \* f(xn + h/2. yn + k1/2)<br>
+   k3 = h \* f(xn + h/2, yn + k2/2)<br>
+   k4 = h \* f(xn + h, y0 + k3)
 3. The next value of y is then calculated as:<br>
-   yn+1 = yn + (k1 + 2 _ k2 + 2 _ k3 + k4) / 6
+   yn+1 = yn + (k1 + 2 \* k2 + 2 \* k3 + k4) / 6
 
 #### Runge-Kutta Code
 
@@ -1658,6 +1855,90 @@ double f(double x, double y)
 {
     return 2 * x + 1;
 }
+
+int main()
+{
+    ifstream in("RK_input.txt");
+    ofstream out("RK_output.txt");
+
+    if (!in || !out)
+    {
+        cout << "Error opening input/output file!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    double x0, y0, xn, yn, h;
+    in >> x0 >> y0; // Initial values x0 and y0
+    in >> xn;       // Final values of x
+    in >> h;        // Step size
+
+    if (h <= 0)
+    {
+        cout << "Step size h must be positive!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    if (xn <= x0)
+    {
+        cout << "xn must be greater than x0!" << endl;
+        in.close();
+        out.close();
+        return 1;
+    }
+
+    int steps = floor((xn - x0) / h);
+
+    if (steps == 0)
+    {
+        cout << "Step size is too large for the given range!" << endl;
+        return 1;
+    }
+
+    out << fixed << setprecision(3);
+    yn = y0;
+
+    out << "RK4 Method: " << endl;
+    for (int i = 1; i <= steps; i++)
+    {
+        double k1 = h * f(x0, y0);
+        double k2 = h * f(x0 + h / 2, y0 + k1 / 2);
+        double k3 = h * f(x0 + h / 2, y0 + k2 / 2);
+        double k4 = h * f(x0 + h, y0 + k3);
+        yn = y0 + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+        x0 = x0 + h;
+        y0 = yn;
+        out << "Step " << i << ": x = " << x0 << "  y = " << y0 << endl;
+    }
+
+    out << "\nFinal Result: yn = " << yn << endl;
+    in.close();
+    out.close();
+
+    return 0;
+}
+```
+
+```
+0 1
+0.2
+0.1
+```
+
+##### Input Format
+
+```
+The input is read from a file named RK_input.txt.
+
+The first line contains two real numbers: x0 (initial value of the independent variable) and y0 (initial value of the dependent variable)
+
+The second line contains a real number: xn (final value of x)
+
+The third line contains a real number: h (step size)
+```
 
 int main()
 {
@@ -1746,6 +2027,401 @@ The third line contains a real number: h (step size)
 ```
 
 #### Runge-Kutta Output
+
+```
+RK4 Method:
+Step 1: x = 0.100  y = 1.110
+Step 2: x = 0.200  y = 1.240
+
+Final Result: yn = 1.240
+
+```
+
+##### Output Format
+
+```
+The output is written to a file named RK_output.txt.
+
+At first the method name is printed.
+
+For each step, the updated values of x and y are displayed.
+
+Finally, the computed value of y at x = xn is printed.
+
+All numerical values are printed with 3 decimal places.
+```
+
+---
+
+### Numerical Integration
+
+### Simpson's one-third rule
+
+#### Simpson's one-third rule Theory
+
+[Add your theory content here]
+
+#### Simpson's one-third rule Code
+
+```python
+# Add your code here
+```
+
+#### Simpson's one-third rule Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Simpson's one-third rule Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Simpson's three-eighths rule rule
+
+#### Simpson's three-eighths rule Theory
+
+[Add your theory content here]
+
+#### Simpson's three-eighths rule Code
+
+```python
+# Add your code here
+```
+
+#### Simpson's three-eighths rule Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Simpson's three-eighths rule Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+---
+
+### Numerical Differentiation
+
+### Differentiation
+
+#### Differentiation Theory
+
+[Add your theory content here]
+
+#### Differentiation Code
+
+```python
+# Add your code here
+```
+
+#### Differentiation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Differentiation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+---
+
+### Curve Fitting Regression
+
+### Linear Equation
+
+#### Linear Equation Theory
+
+[Add your theory content here]
+
+#### Linear Equation Code
+
+```python
+# Add your code here
+```
+
+#### Linear Equation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Linear Equation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Polynomial Equation
+
+#### Polynomial Equation Theory
+
+[Add your theory content here]
+
+#### Polynomial Equation Code
+
+```python
+# Add your code here
+```
+
+#### Polynomial Equation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Polynomial Equation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Transcendental Equation
+
+#### Transcendental Equation Theory
+
+[Add your theory content here]
+
+#### Transcendental Equation Code
+
+```python
+# Add your code here
+```
+
+#### Transcendental Equation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Transcendental Equation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+---
+
+### Interpolation and Approximation
+
+### Newton's Forward Interpolation
+
+#### Newton's Forward Interpolation Theory
+
+[Add your theory content here]
+
+#### Newton's Forward Interpolation Code
+
+```python
+# Add your code here
+```
+
+#### Newton's Forward Interpolation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Newton's Forward Interpolation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Newton's Backward Interpolation
+
+#### Newton's Backward Interpolation Theory
+
+[Add your theory content here]
+
+#### Newton's Backward Interpolation Code
+
+```python
+# Add your code here
+```
+
+#### Newton's Backward Interpolation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Newton's Backward Interpolation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Divided Difference Interpolation
+
+#### Divided Difference Interpolation Theory
+
+[Add your theory content here]
+
+#### Divided Difference Interpolation Code
+
+```python
+# Add your code here
+```
+
+#### Divided Difference Interpolation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Divided Difference Interpolation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Divided Difference Interpolation with Error
+
+#### Divided Difference Interpolation with Error Theory
+
+[Add your theory content here]
+
+#### Divided Difference Interpolation with Error Code
+
+```python
+# Add your code here
+```
+
+#### Divided Difference Interpolation with Error Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Divided Difference Interpolation with Error Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
 
 ```
 RK4 Method:
