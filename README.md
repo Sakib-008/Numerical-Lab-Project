@@ -626,11 +626,12 @@ Implemented by 2207008
 LU factorrization is a matrix decomposition technique used to solve a system of linear equations efficientlly. This method is also called Cholesky method, Doolittle's method, Crout's method. In this method, a square matrix A is decomposed into the product of two triangluar matrices. A = LU. Here L is a lower triangular matrix whose all diagonal elements are 1 and U is an upper triangular matrix. It simplifies the system AX = B by converting it into two simpler systems. AX = B --> LUX = B --> LY = B where (UX = Y). Then solves LY = B by forward substitution and UX = Y. This method is useful when solving system with the same coefficient matrix A but the constant vector B changes. <br>
 Calculation steps:<br>
 
-1. First row of U : u11, u12, u13...
-2. First column of L : l21, l31...
-3. Second row of U : u22, u23...
-4. Second column of L : l32...
-5. Third row of U : u33... <br>
+1. First row of U : u<sub>11</sub>, u<sub>12</sub>, u<sub>13</sub>, ...<br>
+2. First column of L : l<sub>21</sub>, l<sub>31</sub>, ...<br>
+3. Second row of U : u<sub>22</sub>, u<sub>23</sub>, ...<br>
+4. Second column of L : l<sub>32</sub>, ...<br>
+5. Third row of U : u<sub>33</sub>, ...
+
 
 Solution Classification:<br>
 
@@ -1256,8 +1257,8 @@ Algorithm:
 2. Evaluate f(x0), f(x1), f(x2).
 3. If f(x0) = 0, then the root is x0.
 4. Select the subinterval where the sign change occurs based on the following conditions:<br>
-   If f(x0) _ f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
-   If f(x0) _ f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
+   If f(x0) - f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
+   If f(x0) - f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
 5. Repeat the step 3 while fabs(f(x0)) > E. (Solution is close enough to zero).
 
 #### Bisection Code
@@ -1831,18 +1832,21 @@ Implemented by 2207008
 
 #### Runge-Kutta Theory
 
-The Runge-Kutta 4th Order (RK4) method is a numerical technique to approximate the solution of a first-order ordinary differential equation (ODE) which is of the the form: dy/dx = f(x, y), y(x0) = y0. It provies a good balance between accuracy and computational efficiency.<br>
+The Runge-Kutta 4th Order (RK4) method is a numerical technique to approximate the solution of a first-order ordinary differential equation (ODE) which is of the the form: dy/dx = f(x, y), y(x<sub>0</sub>) = y<sub>0</sub>
+. It provies a good balance between accuracy and computational efficiency.<br>
 
 Algorithm:
 
-1. Given a initial value of x --> x0 and y --> y0.
+1. Given a initial value of x --> x<sub>0</sub> and y --> y<sub>0</sub>.
 2. Given a step size h, the value of y at the next point is computed using four intermediate slopes: <br>
-   k1 = h \* f(xn, yn)<br>
-   k2 = h \* f(xn + h/2. yn + k1/2)<br>
-   k3 = h \* f(xn + h/2, yn + k2/2)<br>
-   k4 = h \* f(xn + h, y0 + k3)
+  k<sub>1</sub> = h * f(x<sub>n</sub>, y<sub>n</sub>)<br>
+  k<sub>2</sub> = h * f(x<sub>n</sub> + h/2, y<sub>n</sub> + k<sub>1</sub>/2)<br>
+  k<sub>3</sub> = h * f(x<sub>n</sub> + h/2, y<sub>n</sub> + k<sub>2</sub>/2)<br>
+  k<sub>4</sub> = h * f(x<sub>n</sub> + h, y<sub>n</sub> + k<sub>3</sub>)
+
 3. The next value of y is then calculated as:<br>
-   yn+1 = yn + (k1 + 2 \* k2 + 2 \* k3 + k4) / 6
+   y<sub>n+1</sub> = y<sub>n</sub> + (k<sub>1</sub> + 2 * k<sub>2</sub> + 2 * k<sub>3</sub> + k<sub>4</sub>) / 6
+
 
 #### Runge-Kutta Code
 
