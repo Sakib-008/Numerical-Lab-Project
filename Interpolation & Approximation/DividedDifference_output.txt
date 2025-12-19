@@ -1,0 +1,2 @@
+Newton's Divided Difference Interpolation Method : 
+Interpolated value: 0.628762

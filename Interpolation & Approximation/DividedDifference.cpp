@@ -43,7 +43,8 @@ int main()
         p *= (X - x[j - 1]);
         ans += p * d[0][j];
     }
-
+    out << fixed << setprecision(6);
+    out << "Newton's Divided Difference Interpolation Method : " << endl;
     out << "Interpolated value: " << ans << endl;
     in.close();
     out.close();
