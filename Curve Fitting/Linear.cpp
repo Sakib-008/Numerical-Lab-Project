@@ -31,7 +31,7 @@ pair<double, double> Linear(ofstream &out, vector<double> x, vector<double> y, i
 
 int main(void)
 {
-  ifstream in("Input.txt");
+  ifstream in("LinearEquationInput.txt");
   ofstream out("LinearEquationOutput.txt");
 
   int n;
