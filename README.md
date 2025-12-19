@@ -1449,161 +1449,177 @@ Implemented by 2207007
 
 #### False Position Theory
 
-[Add your theory content here]
+The False Position Method(regular falsi) is a numerical method that is used to find the real root of a nonlinear equation `f(x) = 0`.
+Like the Bisection Method, it is a bracketing method, which needs two points a and b, such that `f(a) · f(b) < 0` (different signs). Instead of finding the midpoint, it uses a straight line between `(a, f(a))` and `(b, f(b))` and the point of intersection with the x-axis.
+Algorithm:
+
+1. Select initial points a and b such that `f(a) · f(b) < 0`
+2. Calculate c:
+
+   `c = b - f(b) · (b - a) / (f(b) - f(a))`
+
+3. Calculate f(c)
+4. Check for convergence: if `|f(c)| < Tolerance(epsilon)`, then c is the root
+5. Update the bracket based on the sign of f(c):
+
+If `f(a) · f(c) > 0`, then a = c
+Else, b = c
+
+Repeat steps 2-5 until converged tolerance or the maximum number of iterations is reached.
 
 #### False Position Code
 
-```python
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
-double f(double x, const vector<double>& a) {
-    int n = a.size() - 1;
-    double res = 0;
-    for (int i = 0; i <= n; i++)
-        res += a[i] * pow(x, n - i);
-    return res;
-}
-// Override the func to change function
-pair<double,int> falsePos(double l, double r, const vector<double>& a,
-                          double eps, int maxIt = 1000) {
-    if (f(l,a) * f(r,a) >= 0) return {0.0, 0};
-
-    double x = l;
-    int it = 0;
-
-    while (it < maxIt && fabs(r - l) > eps) {
-        it++;
-        double fl = f(l,a), fr = f(r,a);
-        x = r - fr * (r - l) / (fr - fl);
-        double fx = f(x,a);
-
-        if (fl * fx < 0) r = x;
-        else l = x;
+double f(double x, vector<double> &v) {
+    double result = 0;
+    int n = v.size();
+    for (int i = 0; i < n; i++) {
+        int deg = n - i - 1;
+        result += v[i] * pow(x, deg);
     }
-    return {x, it};
+    return result;
 }
 
-vector<pair<double,double>> findBrackets(const vector<double>& a,
-                                         double xmin, double xmax, double h) {
-    vector<pair<double,double>> b;
-    for (double x = xmin; x < xmax; x += h) {
-        if (f(x,a) * f(x + h,a) < 0)
-            b.push_back({x, x + h});
-    }
-    return b;
-}
+// False Position for one bracket
+pair<double, int> falsePosition(double a, double b, vector<double> &eqn, double tol, int maxIt = 1000) {
+    double fa = f(a, eqn);
+    double fb = f(b, eqn);
+    if (fa * fb >= 0) return {0, 0};
 
-void printEqn(ofstream &out, const vector<double> &coff) {
-    int n = coff.size() - 1;
-    out<<"Equation:\n";
-    for (int i = 0; i <= n; i++) {
-        if (coff[i] == 0) continue;
+    double c = a;
+    int steps = 0;
+    while (steps < maxIt) {
+        c = b - fb * (b - a) / (fb - fa);
+        double fc = f(c, eqn);
 
-        if (i != 0 && coff[i] > 0) out << " + ";
-        if (coff[i] < 0) out << " - ";
+        steps++; // increment iteration
 
-        int c = abs(coff[i]);
-        if (c != 1 || n - i == 0) out << c;
+        if (fabs(fc) < tol) break;
 
-        if (n - i > 0) {
-            out << "x";
-            if (n - i > 1) out << "^" << (n - i);
+        if (fa * fc < 0) {
+            b = c;
+            fb = fc;
+        } else {
+            a = c;
+            fa = fc;
         }
     }
-    out << endl;
+    return {c, steps};
 }
 
-
 int main() {
-    ifstream in("FalsePositionIn.txt");
-    ofstream out("FalsePositionOut.txt");
+    ifstream in("FB_input.txt");
+    ofstream out("FB_output.txt");
+
     if (!in || !out) return 1;
 
     int n;
     in >> n;
-    vector<double> a(n);
-    for (int i = 0; i < n; i++) in >> a[i];
+    double stepSize, tol;
+    in >> stepSize >> tol;
 
-    double step, eps;
-    in >> step >> eps;
+    vector<double> eqn(n + 1);
+    for (int i = 0; i <= n; i++) in >> eqn[i];
 
-    double xmax = sqrt(pow(a[1]/a[0], 2) - 2*(a[2]/a[0]));
-    double xmin = -xmax;
+    out << "False Position Method\n";
+    out << "Equation: ";
+    for (int i = 0; i <= n; i++) {
+        if (eqn[i] == 0) continue;
+        if (i != 0 && eqn[i] > 0) out << " + ";
+        if (eqn[i] < 0) out << " - ";
+        out << abs(eqn[i]);
+        int deg = n - i;
+        if (deg > 0) out << "x";
+        if (deg > 1) out << "^" << deg;
+    }
+    out << " = 0\n\n";
 
-    auto brackets = findBrackets(a, xmin, xmax, step);
-    printEqn(out, a);
-    out << fixed << setprecision(4);
-    out << "Root      Iter   Bracket\n";
-    out << "------------------------------\n";
-    cout<<"Output in FalsePositionOut.txt";
+    // Fixed scanning range
+    double scanStart = -10, scanEnd = 10;
+    vector<pair<double, double>> intervals;
 
-    for (auto &br : brackets) {
-        auto res = falsePos(br.first, br.second, a, eps);
-        out << setw(8) << res.first
-            << setw(8) << res.second
-            << "   [" << br.first << ", " << br.second << "]\n";
+    double prev = scanStart;
+    for (double cur = scanStart + stepSize; cur <= scanEnd; cur += stepSize) {
+        if (f(prev, eqn) * f(cur, eqn) < 0)
+            intervals.push_back({prev, cur});
+        prev = cur;
     }
 
+    if (intervals.empty()) {
+        out << "No brackets found in this range\n";
+        return 0;
+    }
+
+    out << left << setw(10) << "Root"
+        << setw(12) << "Iterations"
+        << setw(20) << "Bracket" << endl;
+    out << "----------------------------------------\n";
+
+    for (int i = 0; i < intervals.size(); i++) {
+        auto res = falsePosition(intervals[i].first, intervals[i].second, eqn, tol);
+        out << setw(10) << fixed << setprecision(6) << res.first
+            << setw(12) << res.second
+            << "[" << intervals[i].first << ", " << intervals[i].second << "]" << endl;
+    }
+
+    cout << "Output written to FB_output.txt\n";
     return 0;
 }
+
 ```
 
 #### False Position Input
 
-```
-5
-1 0 -5 0 4
-0.5 0.0001
+```txt
+4
+0.1 0.0001
+1 10 -5 0 4
 ```
 
 ##### Input Format:
 
 ```
-The input is read from a file named FalsePositionIn.txt.
+The input is read from a file named FB_input.txt.
 
 The inputs are taken as
 
-n → Number of coefficients of the polynomial (degree + 1)
+deg  -> Degree of the polynomial equation
 
-a0 a1 a2 ... an → Coefficients of the polynomial in descending order
+a0 a1 a2 ... an -> Coefficients of the polynomial in descending order
 
-step → Step size for scanning the interval to find initial brackets
+step -> Step size for scanning the interval to find initial brackets
 
-eps → Convergence tolerance for the root
+eps -> Convergence tolerance for the root
 ```
 
 #### False Position Output
 
-```
-[Add your output format here]
+```txt
+False Position Method
+Equation: 1x^4 + 10x^3 - 5x^2 + 4 = 0
+
+Root      Iterations  Bracket
+----------------------------------------
+-0.610497 4           [-0.700000, -0.600000]
+
 ```
 
 ##### Output Format
 
 ```
-The output is written to a file named FalsePositionOut.txt.
+The output is written to a file named FB_output.txt.
 
 The polynomial equation is printed.
 
-For each bracket (interval) where the function changes sign, the program prints:
-
-Root
-
-Number of iterations needed
-
-The bracket [l, r]
-
-The output is formatted in a table with columns:
-
+In a table Root, Iterations, Bracket are printed for each detected root:
 Root      Iter   Bracket
 ------------------------------
 x1        iter1  [l1, r1]
 x2        iter2  [l2, r2]
-...
 
-
-All numerical values are printed with 4 decimal places.
 ```
 
 ---
@@ -1614,11 +1630,25 @@ Implemented by 2207007
 
 #### Secant Theory
 
-[Add your theory content here]
+The Secant Method is a numerical technique for finding roots of equations f(x) = 0. It's similar to Newton-Raphson but doesn't require the derivative. Instead, it approximates the derivative using two previous points.
+
+The method draws a secant line through two points on the curve and finds where it crosses the x-axis. This intersection becomes the next approximation.
+
+Algorithm:
+
+1. Choose two initial guesses x₀ and x₁
+2. Calculate the next approximation:
+   `x_{n+1} = x_n - f(x_n) · (x_n - x_{n-1}) / (f(x_n) - f(x_{n-1}))`
+3. Evaluate `f(x_{n+1})`
+4. Check convergence: if `|x_{n+1} - x_n| < epsilon`, then `x_{n+1}` is the root
+5. Update: `x_{n-1} = x_n` and `x_n = x_{n+1}`
+6. Repeat steps 2-5 until convergence or maximum iterations reached
+
+The Secant Method converges slower than Newton-Raphson but faster than bisection. Its main advantage is that it doesn't need the derivative, making it useful when `f'(x)` is difficult to compute or doesn't exist.
 
 #### Secant Code
 
-```python
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -1672,6 +1702,7 @@ int main() {
     fout.close();
     return 0;
 }
+
 ```
 
 #### Secant Input
@@ -1721,11 +1752,25 @@ Implemented by 2207007
 
 #### Newton-Raphson Theory
 
-[Add your theory content here]
+The Newton-Raphson Method is a numerical technique for finding roots of equations `f(x) = 0`. It uses the derivative of the function to improve initial guess, converging faster to the solution.
+
+The method draws a tangent line at the current point and finds where it crosses the x-axis. This intersection becomes the next approximation.
+
+Algorithm:
+
+1. Choose an initial guess x₀
+2. Calculate the next approximation:
+   `x_{n+1} = x_n - f(x_n) / f'(x_n)`
+3. Evaluate `f(x_{n+1})`
+4. Check convergence: if `|x_{n+1} - x_n| < epsilon`, then `x_{n+1}` is the root
+5. Update: `x_n = x_{n+1}`
+6. Repeat steps 2-5 until convergence or maximum iterations reached
+
+The method converges rapidly when the initial guess is close to the actual root. However, it requires the derivative `f'(x)` and may fail if the derivative is zero or the starting point is too far from the root.
 
 #### Newton-Raphson Code
 
-```python
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -1792,15 +1837,11 @@ int main() {
 ```
 The input is read from a file named input.txt. It contains:
 
-range_start → Start of the interval to scan for roots
-
-range_end → End of the interval
-
-step → Step size for scanning the interval
-
-epsilon → Tolerance for the root
-
-max_iteration → Maximum number of iterations allowed
+range_start -> Start of the interval to scan for roots
+range_end -> End of the interval
+step -> Step size for scanning the interval
+epsilon -> Tolerance for the root
+max_iteration -> Maximum number of iterations allowed
 ```
 
 #### Newton-Raphson Output
