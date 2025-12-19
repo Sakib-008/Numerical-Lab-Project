@@ -54,6 +54,68 @@
     - [Input](#runge-kutta-input)
     - [Output](#runge-kutta-output)
 
+- [Numerical Integration](#numerical-integration)
+
+  - [Simpson's one-third rule](#simpsons-one-third-rule)
+    - [Theory](#simpsons-one-third-rule-theory)
+    - [Code](#simpsons-one-third-rule-code)
+    - [Input](#simpsons-one-third-rule-input)
+    - [Output](#simpsons-one-third-rule-output)
+  - [Simpson's three-eighths rule](#simpsons-three-eighths-rule)
+    - [Theory](#simpsons-three-eighths-rule-theory)
+    - [Code](#simpsons-three-eighths-rule-code)
+    - [Input](#simpsons-three-eighths-rule-input)
+    - [Output](#simpsons-three-eighths-rule-output)
+
+- [Numerical Differentiation](#numerical-differentiation)
+
+  - [Differentiation](#differentiation)
+    - [Theory](#differentiation-theory)
+    - [Code](#differentiation-code)
+    - [Input](#differentiation-input)
+    - [Output](#differentiation-output)
+
+- [Curve Fitting Regression](#curve-fitting-regression)
+
+  - [Linear Equation](#linear-equation)
+    - [Theory](#linear-equation-theory)
+    - [Code](#linear-equation-code)
+    - [Input](#linear-equation-input)
+    - [Output](#linear-equation-output)
+  - [Polynomial Equation](#polynomial-equation)
+    - [Theory](#polynomial-equation-theory)
+    - [Code](#polynomial-equation-code)
+    - [Input](#polynomial-equation-input)
+    - [Output](#polynomial-equation-output)
+  - [Transcendental Equation](#transcendental-equation)
+    - [Theory](#transcendental-equation-theory)
+    - [Code](#transcendental-equation-code)
+    - [Input](#transcendental-equation-input)
+    - [Output](#transcendental-equation-output)
+
+- [Interpolation and Approximation](#interpolation-and-approximation)
+
+  - [Newton's Forward Interpolation](#newtons-forward-interpolation)
+    - [Theory](#newtons-forward-interpolation-theory)
+    - [Code](#newtons-forward-interpolation-code)
+    - [Input](#newtons-forward-interpolation-input)
+    - [Output](#newtons-forward-interpolation-output)
+  - [Newton's Backward Interpolation](#newtons-backward-interpolation)
+    - [Theory](#newtons-backward-interpolation-theory)
+    - [Code](#newtons-backward-interpolation-code)
+    - [Input](#newtons-backward-interpolation-input)
+    - [Output](#newtons-backward-interpolation-output)
+  - [Divided Difference Interpolation](#divided-difference-interpolation)
+    - [Theory](#divided-difference-interpolation-theory)
+    - [Code](#divided-difference-interpolation-code)
+    - [Input](#divided-difference-interpolation-input)
+    - [Output](#divided-difference-interpolation-output)
+  - [Divided Difference Interpolation with Error](#divided-difference-interpolation-with-error)
+    - [Theory](#divided-difference-interpolation-with-error-theory)
+    - [Code](#divided-difference-interpolation-with-error-code)
+    - [Input](#divided-difference-interpolation-with-error-input)
+    - [Output](#divided-difference-interpolation-with-error-output)
+
 ---
 
 ### Solution of Linear Equations
@@ -1602,6 +1664,382 @@ For each step, the updated values of x and y are displayed.
 Finally, the computed value of y at x = xn is printed.
 
 All numerical values are printed with 3 decimal places.
+```
+
+---
+
+### Numerical Integration
+
+### Simpson's one-third rule
+
+#### Simpson's one-third rule Theory
+
+[Add your theory content here]
+
+#### Simpson's one-third rule Code
+
+```python
+# Add your code here
+```
+
+#### Simpson's one-third rule Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Simpson's one-third rule Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Simpson's three-eighths rule rule
+
+#### Simpson's three-eighths rule Theory
+
+[Add your theory content here]
+
+#### Simpson's three-eighths rule Code
+
+```python
+# Add your code here
+```
+
+#### Simpson's three-eighths rule Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Simpson's three-eighths rule Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+---
+
+### Numerical Differentiation
+
+### Differentiation
+
+#### Differentiation Theory
+
+[Add your theory content here]
+
+#### Differentiation Code
+
+```python
+# Add your code here
+```
+
+#### Differentiation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Differentiation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+---
+
+### Curve Fitting Regression
+
+### Linear Equation
+
+#### Linear Equation Theory
+
+[Add your theory content here]
+
+#### Linear Equation Code
+
+```python
+# Add your code here
+```
+
+#### Linear Equation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Linear Equation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Polynomial Equation
+
+#### Polynomial Equation Theory
+
+[Add your theory content here]
+
+#### Polynomial Equation Code
+
+```python
+# Add your code here
+```
+
+#### Polynomial Equation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Polynomial Equation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Transcendental Equation
+
+#### Transcendental Equation Theory
+
+[Add your theory content here]
+
+#### Transcendental Equation Code
+
+```python
+# Add your code here
+```
+
+#### Transcendental Equation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Transcendental Equation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+---
+
+### Interpolation and Approximation
+
+### Newton's Forward Interpolation
+
+#### Newton's Forward Interpolation Theory
+
+[Add your theory content here]
+
+#### Newton's Forward Interpolation Code
+
+```python
+# Add your code here
+```
+
+#### Newton's Forward Interpolation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Newton's Forward Interpolation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Newton's Backward Interpolation
+
+#### Newton's Backward Interpolation Theory
+
+[Add your theory content here]
+
+#### Newton's Backward Interpolation Code
+
+```python
+# Add your code here
+```
+
+#### Newton's Backward Interpolation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Newton's Backward Interpolation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Divided Difference Interpolation
+
+#### Divided Difference Interpolation Theory
+
+[Add your theory content here]
+
+#### Divided Difference Interpolation Code
+
+```python
+# Add your code here
+```
+
+#### Divided Difference Interpolation Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Divided Difference Interpolation Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
+```
+
+### Divided Difference Interpolation with Error
+
+#### Divided Difference Interpolation with Error Theory
+
+[Add your theory content here]
+
+#### Divided Difference Interpolation with Error Code
+
+```python
+# Add your code here
+```
+
+#### Divided Difference Interpolation with Error Input
+
+```
+[Add your input here]
+```
+
+##### Input Format
+
+```
+[Add your input format here]
+```
+
+#### Divided Difference Interpolation with Error Output
+
+```
+[Add your output here]
+```
+
+##### Output Format
+
+```
+[Add your output format here]
 ```
 
 ---
