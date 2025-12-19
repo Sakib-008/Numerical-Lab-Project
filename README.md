@@ -2265,36 +2265,132 @@ The output is printed rounded with 2 decimal numbers after the floating point
 
 #### Differentiation Theory
 
-[Add your theory content here]
+Forward Differentiation is a numerical method used to approximate the derivative of a function at a given point using forward difference formulas. It constructs a difference table from function values and applies formulas to estimate first and second derivatives.
+
+The method uses equally spaced points and builds a table of forward differences, then applies Newton's forward difference formulas to calculate derivatives.
+
+Algorithm:
+
+1. Divide the interval `[a, b]` into n equal subintervals
+2. Calculate the step size:
+   `h = (b - a) / n`
+3. Generate points and evaluate the function:
+   `x_i = a + i · h` and `y_i = f(x_i)` for `i = 0, 1, 2, ..., n`
+4. Construct the forward difference table:
+   - `Δ⁰y_i = y_i`
+   - `Δʲy_i = Δʲ⁻¹y_{i+1} - Δʲ⁻¹y_i` for `j = 1, 2, ..., n`
+5. Calculate the normalized distance from the first point:
+   `u = (p - x_0) / h`
+6. Apply Newton's forward difference formula for first derivative:
+   `f'(p) = [Δy_0 + ((2u-1)/2)·Δ²y_0 + ((3u²-6u+2)/6)·Δ³y_0] / h`
+7. Apply formula for second derivative:
+   `f''(p) = [Δ²y_0 + (u-1)·Δ³y_0] / h²`
+
+Forward differentiation works best when the point p is near the beginning of the interval. The accuracy depends on the step size h and the smoothness of the function.
 
 #### Differentiation Code
 
-```python
-# Add your code here
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+double func(double x) {
+    return x*x*x - 2*x*x + x;
+}
+
+void forwardDifferentiation(double a, double b, int n, double p, ofstream &fout) {
+    double h = (b - a) / n;
+
+    vector<double> X(n+1), Y(n+1);
+    for (int i = 0; i <= n; i++) {
+        X[i] = a + i*h;
+        Y[i] = func(X[i]);
+    }
+
+    // Forward difference table
+    vector<vector<double>> d(n+1, vector<double>(n+1, 0));
+    for (int i = 0; i <= n; i++)
+        d[i][0] = Y[i];
+
+    for (int j = 1; j <= n; j++)
+        for (int i = 0; i <= n - j; i++)
+            d[i][j] = d[i+1][j-1] - d[i][j-1];
+
+    fout << "Forward Difference Table:\n";
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= n-i; j++)
+            fout << d[i][j] << "\t";
+        fout << "\n";
+    }
+
+    double u = (p - X[0]) / h;
+
+    double fp = 0, fpp = 0;
+
+    if (n >= 2) {
+        fp = (d[0][1] + ((2*u - 1)/2.0)*d[0][2] + ((3*u*u - 6*u + 2)/6.0)*d[0][3]) / h;
+        fpp = (d[0][2] + (u - 1)*d[0][3]) / (h*h);
+    } else if (n == 1) {
+        fp = d[0][1] / h;
+        fpp = 0;
+    }
+
+    fout << "\nf'(p) = " << fp << endl;
+    fout << "f''(p) = " << fpp << endl;
+}
+
+int main() {
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    double a, b, p;
+    int n;
+
+    fin >> a >> b >> n >> p;
+
+    forwardDifferentiation(a, b, n, p, fout);
+
+    fin.close();
+    fout.close();
+    return 0;
+}
+
 ```
 
 #### Differentiation Input
 
 ```
-[Add your input here]
+0 2 4 1.5
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+a -> starting point of the interval
+b -> ending point of the interval
+n -> number of subintervals (determines how many points to use)
+p -> the specific point where you want to calculate the derivative
 ```
 
 #### Differentiation Output
 
 ```
-[Add your output here]
+Forward Difference Table:
+0	0.125	-0.25	0.75	0
+0.125	-0.125	0.5	0.75
+0	0.375	1.25
+0.375	1.625
+2
+
+f'(p) = 1.75
+f''(p) = 5
+
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The forward Difference table is printed and then the first and second order derivative are calculated
 ```
 
 ---
