@@ -3,7 +3,7 @@
 using namespace std;
 
 // The linear equation format is: y=a+bx
-pair<double, double> Linear(ofstream &out, vector<double> x, vector<double> y, int newX)
+void Linear(ofstream &out, vector<double> x, vector<double> y, int newX)
 {
   int n = x.size();
   double Sx = 0, Sy = 0, Sxx = 0, Sxy = 0;
@@ -25,8 +25,6 @@ pair<double, double> Linear(ofstream &out, vector<double> x, vector<double> y, i
 
   out << "For x = " << newX << ", the predicted value of y is: ";
   out << newY << endl;
-
-  return {a, b};
 }
 
 int main(void)

@@ -2115,7 +2115,7 @@ y = a + bx
 using namespace std;
 
 // The linear equation format is: y=a+bx
-pair<double, double> Linear(ofstream &out, vector<double> x, vector<double> y, int newX)
+void Linear(ofstream &out, vector<double> x, vector<double> y, int newX)
 {
   int n = x.size();
   double Sx = 0, Sy = 0, Sxx = 0, Sxy = 0;
@@ -2137,8 +2137,6 @@ pair<double, double> Linear(ofstream &out, vector<double> x, vector<double> y, i
 
   out << "For x = " << newX << ", the predicted value of y is: ";
   out << newY << endl;
-
-  return {a, b};
 }
 
 int main(void)
@@ -2232,36 +2230,210 @@ Finally, the predicted value of y corresponding to x = newX is printed.
 
 #### Polynomial Equation Theory
 
-[Add your theory content here]
+Polynomial equation can be solved using curve fitting. It is a numerical technique to find the best fit polynomial curve that represents the relationship between two variables based on a given set of data points. In this method, the relationship between the variables is assumed to be a polynomial of degree m and is expressed in the form: y=a0​+a1​x^1+a2​x^2+⋯+am​x^m. Here, a0,a1,a2,...,am are the coefficients of the polynomial. These coefficients are determined using the least squares principle. After the best fit polynomial equation is obtained, it can be used to predict the value of the dependent variable (y) for any given value of the independent variable (x).
 
 #### Polynomial Equation Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void printPolynomial(ofstream &out, vector<double> coeff, int m)
+{
+  out << "y = ";
+  bool firstTerm = true;
+
+  for (int i = 0; i < m; i++)
+  {
+    if (coeff[i] == 0)
+      continue;
+
+    if (!firstTerm)
+      out << " + ";
+
+    if (i == 0)
+    {
+      out << coeff[i];
+    }
+    else if (i == 1)
+    {
+      if (coeff[i] == 1)
+        out << "x";
+      else
+        out << coeff[i] << "x";
+    }
+    else
+    {
+      if (coeff[i] == 1)
+        out << "x^" << i;
+      else
+        out << coeff[i] << "x^" << i;
+    }
+    firstTerm = false;
+  }
+  out << endl;
+}
+
+void Polynomial(ofstream &out, vector<double> x, vector<double> y, int m, double newX, int n)
+{
+  int size = m + 1;
+  vector<vector<double>> A(size, vector<double>(size, 0));
+  vector<double> B(size, 0);
+
+  for (int i = 0; i < size; i++)
+  {
+    for (int j = 0; j < size; j++)
+    {
+      for (int k = 0; k < n; k++)
+      {
+        A[i][j] += pow(x[k], i + j);
+      }
+    }
+    for (int k = 0; k < n; k++)
+    {
+      B[i] += y[k] * pow(x[k], i);
+    }
+  }
+
+  vector<double> coeff(size, 0);
+  for (int i = 0; i < size; i++)
+  {
+    int maxi = i;
+    for (int k = i + 1; k < size; k++)
+    {
+      if (fabs(A[k][i]) > fabs(A[maxi][i]))
+      {
+        maxi = k;
+      }
+    }
+    if (A[maxi][i] == 0)
+    {
+      out << "Matrix is singular." << endl;
+      return;
+    }
+    if (maxi != i)
+    {
+      swap(A[i], A[maxi]);
+      swap(B[i], B[maxi]);
+    }
+
+    for (int j = i + 1; j < size; j++)
+    {
+      double factor = A[j][i] / A[i][i];
+      for (int k = i; k < size; k++)
+      {
+        A[j][k] -= factor * A[i][k];
+      }
+      B[j] -= factor * B[i];
+    }
+  }
+  for (int i = size - 1; i >= 0; i--)
+  {
+    coeff[i] = B[i];
+    for (int j = i + 1; j < size; j++)
+    {
+      coeff[i] -= A[i][j] * coeff[j];
+    }
+    coeff[i] /= A[i][i];
+  }
+
+  printPolynomial(out, coeff, m);
+
+  double newY = 0.0;
+  for (int i = 0; i < size; i++)
+  {
+    newY += coeff[i] * pow(newX, i);
+  }
+  out << "Predicted value at x = " << newX << " is y = " << newY << endl;
+}
+
+int main(void)
+{
+  ifstream in("PolynomialEquationInput.txt");
+  ofstream out("PolynomialEquationOutput.txt");
+
+  int n;
+  in >> n;
+
+  vector<double> x(n), y(n);
+  for (int i = 0; i < n; i++)
+  {
+    in >> x[i] >> y[i];
+  }
+
+  out << setprecision(2) << fixed;
+
+  out << "Data points entered:" << endl;
+  for (int i = 0; i < n; i++)
+  {
+    out << "(" << x[i] << ", " << y[i] << ")\n";
+  }
+
+  int m;
+  in >> m;
+
+  double newX;
+  in >> newX;
+
+  Polynomial(out, x, y, m, newX, n);
+
+  in.close();
+  out.close();
+  return 0;
+}
 ```
 
 #### Polynomial Equation Input
 
 ```
-[Add your input here]
+5
+1 6
+2 11
+3 18
+4 27
+5 38
+3
+6
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is taken from a file named PolynomialEquationInput.txt.
+
+The first line of input contains an integer n - the number of data points.
+
+The next n lines each contain two real numbers x and y - the coordinates of the data points.
+
+The next line contains an integer m - the degree of the polynomial.
+
+The last line contains a real number newX, for which the predicted value of y is to be calculated.
 ```
 
 #### Polynomial Equation Output
 
 ```
-[Add your output here]
+Data points entered:
+(1.00, 6.00)
+(2.00, 11.00)
+(3.00, 18.00)
+(4.00, 27.00)
+(5.00, 38.00)
+y = 3.00 + 2.00x + 1.00x^2
+For x = 6.00, predicted value of y is: 51.00
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named PolynomialEquationOutput.txt.
+
+All the entered data points are printed.
+
+Then the best fit polynomial equation is printed.
+
+Finally, the predicted value of y for x = newX is printed.
 ```
 
 ### Transcendental Equation
