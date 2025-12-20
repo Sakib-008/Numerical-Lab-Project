@@ -1399,7 +1399,7 @@ The third line contains n + 1 real numbers : Coefficients of the polynomial in d
 #### Bisection Output
 
 ```
-Bisection method :
+Bisection method : 
 The inputted equation is : 1x^4 - 5x^2 + 4 = 0
 Bracket for root 1 : [-2.162, -1.662]
 Iteration needed : 15
@@ -1512,8 +1512,8 @@ pair<double, int> falsePosition(double a, double b, vector<double> &eqn, double 
 }
 
 int main() {
-    ifstream in("FB_input.txt");
-    ofstream out("FB_output.txt");
+    ifstream in("F_input.txt");
+    ofstream out("F_output.txt");
 
     if (!in || !out) return 1;
 
@@ -1554,8 +1554,8 @@ int main() {
         return 0;
     }
 
-    out << left << setw(10) << "Root"
-        << setw(12) << "Iterations"
+    out << left << setw(10) << "Root" 
+        << setw(12) << "Iterations" 
         << setw(20) << "Bracket" << endl;
     out << "----------------------------------------\n";
 
@@ -1583,7 +1583,7 @@ int main() {
 ##### Input Format:
 
 ```
-The input is read from a file named FB_input.txt.
+The input is read from a file named F_input.txt.
 
 The inputs are taken as
 
@@ -1611,7 +1611,7 @@ Root      Iterations  Bracket
 ##### Output Format
 
 ```
-The output is written to a file named FB_output.txt.
+The output is written to a file named F_output.txt.
 
 The polynomial equation is printed.
 
