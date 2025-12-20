@@ -136,7 +136,7 @@ Algorithm:
 
 #### Gauss Elimination Code
 
-```python
+```cpp
 // Gauss Elimination Method implemented by 2207009
 #include <bits/stdc++.h>
 using namespace std;
@@ -385,7 +385,7 @@ Algorithm:
 
 #### Gauss Jordan Code
 
-```python
+```cpp
 // Gauss Jordan Elimination Method implemented by 2207009
 #include <bits/stdc++.h>
 using namespace std;
@@ -640,7 +640,7 @@ Solution Classification:<br>
 
 #### LU Decomposition Code
 
-```python
+```cpp
 // LU Decomposition implemented by 2207008
 
 #include <bits/stdc++.h>
@@ -910,7 +910,7 @@ Algorithm:
 
 #### Matrix Inversion Code
 
-```python
+```cpp
 // Matrix Inversion Method implemented by 2207009
 #include <bits/stdc++.h>
 using namespace std;
@@ -1262,7 +1262,7 @@ Algorithm:
 
 #### Bisection Code
 
-```python
+```cpp
 // Bi_Section implemented by 2207008
 
 #include <bits/stdc++.h>
@@ -1399,7 +1399,7 @@ The third line contains n + 1 real numbers : Coefficients of the polynomial in d
 #### Bisection Output
 
 ```
-Bisection method : 
+Bisection method :
 The inputted equation is : 1x^4 - 5x^2 + 4 = 0
 Bracket for root 1 : [-2.162, -1.662]
 Iteration needed : 15
@@ -1554,8 +1554,8 @@ int main() {
         return 0;
     }
 
-    out << left << setw(10) << "Root" 
-        << setw(12) << "Iterations" 
+    out << left << setw(10) << "Root"
+        << setw(12) << "Iterations"
         << setw(20) << "Bracket" << endl;
     out << "----------------------------------------\n";
 
@@ -1889,7 +1889,7 @@ Algorithm:
 
 #### Runge-Kutta Code
 
-```python
+```cpp
 // RK_Method implemented by 2207008
 
 #include <bits/stdc++.h>
@@ -2421,7 +2421,7 @@ y = a + bx
 
 #### Linear Equation Code
 
-```python
+```cpp
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -2570,7 +2570,7 @@ Algorithm:
 
 #### Polynomial Equation Code
 
-```python
+```cpp
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -2807,7 +2807,7 @@ y = ax^b
 
 #### Transcendental Equation Code
 
-```python
+```cpp
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -2948,7 +2948,7 @@ Algorithm:
 
 #### Newton's Forward Interpolation Code
 
-```python
+```cpp
 // Implemented by 2207008
 
 #include <bits/stdc++.h>
@@ -3103,7 +3103,7 @@ Algorithm:
 
 #### Newton's Backward Interpolation Code
 
-```python
+```cpp
 // Implemented by 2207008
 
 #include <bits/stdc++.h>
@@ -3261,7 +3261,7 @@ Algorithm:
 
 #### Divided Difference Interpolation Code
 
-```python
+```cpp
 // Implemented by 2207008
 
 #include <bits/stdc++.h>
@@ -3381,7 +3381,7 @@ Algorithm:
 
 #### Divided Difference Interpolation with Error Code
 
-```python
+```cpp
 // Implemented by 2207008
 
 #include <bits/stdc++.h>
