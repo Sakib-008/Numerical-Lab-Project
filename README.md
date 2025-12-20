@@ -2406,108 +2406,499 @@ The forward Difference table is printed and then the first and second order deri
 
 #### Linear Equation Theory
 
-[Add your theory content here]
+Linear equation can be solved using curve fitting which is also known as linear regression. It is a numerical technique to find the best fit straight line that represents the relationship between two variables based on a given set of data points. The relationship between the variables is expressed in the form y=a+bx. Where a is the intercept and 𝑏 is the slope of the line. The values of a and b are determined using the least squares principle. When the best fit equation is obtained, it can be used to predict the value of the dependent variable (y) for any given value of the independent variable (x).
+
+​
+Formula:
+
+let, n is the number of data points. Then,
+
+b = n*∑xy−(∑x)(∑y)​ / n*∑x^2−(∑x)^2
+
+a = ∑y−b∑x / n
+
+Best fit Linear Equation is:
+
+y = a + bx
 
 #### Linear Equation Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// The linear equation format is: y=a+bx
+void Linear(ofstream &out, vector<double> x, vector<double> y, int newX)
+{
+  int n = x.size();
+  double Sx = 0, Sy = 0, Sxx = 0, Sxy = 0;
+  for (int i = 0; i < n; i++)
+  {
+    Sx += x[i];
+    Sy += y[i];
+    Sxx += x[i] * x[i];
+    Sxy += x[i] * y[i];
+  }
+  double b = (n * Sxy - Sx * Sy) / (n * Sxx - Sx * Sx);
+
+  double a = (Sy - b * Sx) / n;
+
+  out << "The Linear Equation is: " << endl;
+  out << "y = " << a << " + " << b << "x" << endl;
+
+  double newY = a + b * newX;
+
+  out << "For x = " << newX << ", the predicted value of y is: ";
+  out << newY << endl;
+}
+
+int main(void)
+{
+  ifstream in("LinearEquationInput.txt");
+  ofstream out("LinearEquationOutput.txt");
+
+  int n;
+  in >> n;
+  vector<double> x(n), y(n);
+
+  for (int i = 0; i < n; i++)
+  {
+    in >> x[i] >> y[i];
+  }
+
+  out << setprecision(2) << fixed;
+
+  out << "Data points entered:" << endl;
+  for (int i = 0; i < n; i++)
+  {
+    out << "(" << x[i] << ", " << y[i] << ")\n";
+  }
+
+  int newX;
+  in >> newX;
+  Linear(out, x, y, newX);
+
+  in.close();
+  out.close();
+  return 0;
+}
 ```
 
 #### Linear Equation Input
 
 ```
-[Add your input here]
+7
+1 3
+2 4
+3 4
+4 5
+5 8
+6 9
+7 10
+8
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is taken from a file named LinearEquationInput.txt.
+
+The first line of input contains an integer n - the number of data points.
+
+The next n lines each contain two real numbers x and y - the coordinates of the data points.
+
+The last line of input contains an integer newX - for which the predicted value of y is to be calculated.
 ```
 
 #### Linear Equation Output
 
 ```
-[Add your output here]
+Data points entered:
+(1.00, 3.00)
+(2.00, 4.00)
+(3.00, 4.00)
+(4.00, 5.00)
+(5.00, 8.00)
+(6.00, 9.00)
+(7.00, 10.00)
+The Linear Equation is:
+y = 1.14 + 1.25x
+For x = 8, the predicted value of y is: 11.14
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named LinearEquationOutput.txt.
+
+All the entered data points are printed.
+
+Then the equation of the best fit straight line is printed in the form
+y = a + bx.
+
+Finally, the predicted value of y corresponding to x = newX is printed.
 ```
 
 ### Polynomial Equation
 
 #### Polynomial Equation Theory
 
-[Add your theory content here]
+Polynomial equation can be solved using curve fitting. It is a numerical technique to find the best fit polynomial curve that represents the relationship between two variables based on a given set of data points. In this method, the relationship between the variables is assumed to be a polynomial of degree m and is expressed in the form: y=a0​+a1​x^1+a2​x^2+⋯+am​x^m. Here, a0,a1,a2,...,am are the coefficients of the polynomial. These coefficients are determined using the least squares principle. After the best fit polynomial equation is obtained, it can be used to predict the value of the dependent variable (y) for any given value of the independent variable (x).
 
 #### Polynomial Equation Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void printPolynomial(ofstream &out, vector<double> coeff, int m)
+{
+  out << "y = ";
+  bool firstTerm = true;
+
+  for (int i = 0; i < m; i++)
+  {
+    if (coeff[i] == 0)
+      continue;
+
+    if (!firstTerm)
+      out << " + ";
+
+    if (i == 0)
+    {
+      out << coeff[i];
+    }
+    else if (i == 1)
+    {
+      if (coeff[i] == 1)
+        out << "x";
+      else
+        out << coeff[i] << "x";
+    }
+    else
+    {
+      if (coeff[i] == 1)
+        out << "x^" << i;
+      else
+        out << coeff[i] << "x^" << i;
+    }
+    firstTerm = false;
+  }
+  out << endl;
+}
+
+void Polynomial(ofstream &out, vector<double> x, vector<double> y, int m, double newX, int n)
+{
+  int size = m + 1;
+  vector<vector<double>> A(size, vector<double>(size, 0));
+  vector<double> B(size, 0);
+
+  for (int i = 0; i < size; i++)
+  {
+    for (int j = 0; j < size; j++)
+    {
+      for (int k = 0; k < n; k++)
+      {
+        A[i][j] += pow(x[k], i + j);
+      }
+    }
+    for (int k = 0; k < n; k++)
+    {
+      B[i] += y[k] * pow(x[k], i);
+    }
+  }
+
+  vector<double> coeff(size, 0);
+  for (int i = 0; i < size; i++)
+  {
+    int maxi = i;
+    for (int k = i + 1; k < size; k++)
+    {
+      if (fabs(A[k][i]) > fabs(A[maxi][i]))
+      {
+        maxi = k;
+      }
+    }
+    if (A[maxi][i] == 0)
+    {
+      out << "Matrix is singular." << endl;
+      return;
+    }
+    if (maxi != i)
+    {
+      swap(A[i], A[maxi]);
+      swap(B[i], B[maxi]);
+    }
+
+    for (int j = i + 1; j < size; j++)
+    {
+      double factor = A[j][i] / A[i][i];
+      for (int k = i; k < size; k++)
+      {
+        A[j][k] -= factor * A[i][k];
+      }
+      B[j] -= factor * B[i];
+    }
+  }
+  for (int i = size - 1; i >= 0; i--)
+  {
+    coeff[i] = B[i];
+    for (int j = i + 1; j < size; j++)
+    {
+      coeff[i] -= A[i][j] * coeff[j];
+    }
+    coeff[i] /= A[i][i];
+  }
+
+  printPolynomial(out, coeff, m);
+
+  double newY = 0.0;
+  for (int i = 0; i < size; i++)
+  {
+    newY += coeff[i] * pow(newX, i);
+  }
+  out << "Predicted value at x = " << newX << " is y = " << newY << endl;
+}
+
+int main(void)
+{
+  ifstream in("PolynomialEquationInput.txt");
+  ofstream out("PolynomialEquationOutput.txt");
+
+  int n;
+  in >> n;
+
+  vector<double> x(n), y(n);
+  for (int i = 0; i < n; i++)
+  {
+    in >> x[i] >> y[i];
+  }
+
+  out << setprecision(2) << fixed;
+
+  out << "Data points entered:" << endl;
+  for (int i = 0; i < n; i++)
+  {
+    out << "(" << x[i] << ", " << y[i] << ")\n";
+  }
+
+  int m;
+  in >> m;
+
+  double newX;
+  in >> newX;
+
+  Polynomial(out, x, y, m, newX, n);
+
+  in.close();
+  out.close();
+  return 0;
+}
 ```
 
 #### Polynomial Equation Input
 
 ```
-[Add your input here]
+5
+1 6
+2 11
+3 18
+4 27
+5 38
+3
+6
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is taken from a file named PolynomialEquationInput.txt.
+
+The first line of input contains an integer n - the number of data points.
+
+The next n lines each contain two real numbers x and y - the coordinates of the data points.
+
+The next line contains an integer m - the degree of the polynomial.
+
+The last line contains a real number newX, for which the predicted value of y is to be calculated.
 ```
 
 #### Polynomial Equation Output
 
 ```
-[Add your output here]
+Data points entered:
+(1.00, 6.00)
+(2.00, 11.00)
+(3.00, 18.00)
+(4.00, 27.00)
+(5.00, 38.00)
+y = 3.00 + 2.00x + 1.00x^2
+For x = 6.00, predicted value of y is: 51.00
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named PolynomialEquationOutput.txt.
+
+All the entered data points are printed.
+
+Then the best fit polynomial equation is printed.
+
+Finally, the predicted value of y for x = newX is printed.
 ```
 
 ### Transcendental Equation
 
 #### Transcendental Equation Theory
 
-[Add your theory content here]
+Transcendental equation can be solved using curve fitting which is also known as power regression. It is a numerical technique used to find the best fit curve when the relationship between two variables is non-linear and follows a power law. The relationship between the variables is expressed in the form y=ax^b, where a and b are constants. To apply the least squares principle, the equation is first converted into a linear form by taking logarithm on both sides, which gives lny=lna+blnx. Assuming lny as Y and lnx as X. Then, the equation becomes a straight line equation. The values of a and b are then determined using the least squares method. After that, the best fit curve equation is obtained. Then, it can be used to predict the value of the dependent variable (y) for any given value of the independent variable (x).
+
+Formula:
+
+Let, n is the number of data points.
+
+Given equation is, y=ax^b
+
+taking logarithm on both sides:
+
+lny=lna+blnx
+
+Let,
+
+Y=lny, X=lnx, A=lna
+
+Now,
+​
+
+b = n∑XY−(∑X)(∑Y) / n∑X^2 - (∑X)^2
+
+A = ∑Y−b∑X / n
+
+a = e^A
+
+The best fit transcendental equation is:
+
+y = ax^b
 
 #### Transcendental Equation Code
 
 ```python
-# Add your code here
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// The transcendental equation format is: y=ax^b
+// lny = lna + blnx (Taking ln on both sides)
+// Y = A + bX
+// Here, Y = lny, X = lnx, A = lna
+void Transcendental(ofstream &out, vector<double> x, vector<double> y, int newX)
+{
+  int n = x.size();
+  double Sx = 0, Sy = 0, Sxx = 0, Sxy = 0;
+  for (int i = 0; i < n; i++)
+  {
+    Sx += log(x[i]);
+    Sy += log(y[i]);
+    Sxx += log(x[i]) * log(x[i]);
+    Sxy += log(x[i]) * log(y[i]);
+  }
+  double b = (n * Sxy - Sx * Sy) / (n * Sxx - Sx * Sx);
+
+  double A = (Sy - b * Sx) / n;
+  double a = exp(A);
+
+  out << "The Transcendental Equation is: " << endl;
+  out << "y = " << a << "x^" << b << endl;
+
+  double newY = a * pow(newX, b);
+  out << "For x = " << newX << ", the predicted value of y is: ";
+  out << newY << endl;
+}
+
+int main(void)
+{
+  ifstream in("TranscendentalEquationInput.txt");
+  ofstream out("TranscendentalEquationOutput.txt");
+
+  int n;
+  in >> n;
+  vector<double> x(n), y(n);
+
+  for (int i = 0; i < n; i++)
+  {
+    in >> x[i] >> y[i];
+  }
+
+  out << setprecision(2) << fixed;
+
+  out << "Data points entered:" << endl;
+  for (int i = 0; i < n; i++)
+  {
+    out << "(" << x[i] << ", " << y[i] << ")\n";
+  }
+
+  int newX;
+  in >> newX;
+  Transcendental(out, x, y, newX);
+
+  in.close();
+  out.close();
+  return 0;
+}
 ```
 
 #### Transcendental Equation Input
 
 ```
-[Add your input here]
+5
+1 50
+2 80
+3 96
+4 120
+5 145
+6
 ```
 
 ##### Input Format
 
 ```
-[Add your input format here]
+The input is taken from a file named TranscendentalEquationInput.txt.
+
+The first line of input contains an integer n - the number of data points.
+
+The next n lines each contain two real numbers x and y - the coordinates of the data points.
+
+The last line of input contains an integer newX - for which the predicted value of y is to be calculated.
 ```
 
 #### Transcendental Equation Output
 
 ```
-[Add your output here]
+Data points entered:
+(1.00, 50.00)
+(2.00, 80.00)
+(3.00, 96.00)
+(4.00, 120.00)
+(5.00, 145.00)
+The Transcendental Equation is:
+y = 49.88x^0.64
+For x = 6, the predicted value of y is: 157.62
 ```
 
 ##### Output Format
 
 ```
-[Add your output format here]
+The output is written to a file named TranscendentalEquationOutput.txt.
+
+All the entered data points are printed.
+
+Then the best fit transcendental equation is printed in the form
+y=ax^b.
+
+Finally, the predicted value of y corresponding to x = newX is printed.
 ```
 
 ---
