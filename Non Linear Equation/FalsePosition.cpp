@@ -39,8 +39,8 @@ pair<double, int> falsePosition(double a, double b, vector<double> &eqn, double 
 }
 
 int main() {
-    ifstream in("FB_input.txt");
-    ofstream out("FB_output.txt");
+    ifstream in("F_input.txt");
+    ofstream out("F_output.txt");
 
     if (!in || !out) return 1;
 
