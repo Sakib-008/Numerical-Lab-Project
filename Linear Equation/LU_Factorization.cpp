@@ -15,7 +15,7 @@ int main()
     }
 
     out << fixed << setprecision(3);
-    out<<"LU Factorization method : "<<endl;
+    out << "LU Factorization method : " << endl;
 
     int t; // Number of test cases
     in >> t;
@@ -95,14 +95,16 @@ int main()
             if (fabs(U[i][i]) < 1e-9 && fabs(Y[i]) > 1e-9)
             {
                 out << "\nNo Solution!" << endl;
-                        out << "\n------------------------------\n" << endl;
+                out << "\n------------------------------\n"
+                    << endl;
                 soln = false;
                 break;
             }
             else if (fabs(U[i][i]) < 1e-9 && fabs(Y[i]) < 1e-9)
             {
                 out << "\nInfinite Solution!" << endl;
-                        out << "\n------------------------------\n" << endl;
+                out << "\n------------------------------\n"
+                    << endl;
                 soln = false;
                 break;
             }
@@ -124,7 +126,8 @@ int main()
         {
             out << "x" << i + 1 << " = " << X[i] << endl;
         }
-        out << "\n------------------------------\n" << endl;
+        out << "\n------------------------------\n"
+            << endl;
     }
     in.close();
     out.close();
