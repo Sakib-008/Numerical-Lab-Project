@@ -3463,15 +3463,9 @@ The last line contains a real number X, the value at which interpolation is need
 #### Divided Difference Interpolation with Error Output
 
 ```
-Newton's Forward Interpolation Method : 
-
-Forward Difference Table:
-       180        -30          0          0 
-       150        -30          0 
-       120        -30 
-        90 
-
-Interpolated answer : 165.000
+Newton's Divided Difference Interpolation Method for Calculating Error: 
+Interpolated value : 0.565846
+Estimated error using the extra point: 0.062916
 
 ```
 
