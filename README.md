@@ -1256,8 +1256,8 @@ Algorithm:
 2. Evaluate f(x0), f(x1), f(x2).
 3. If f(x0) = 0, then the root is x0.
 4. Select the subinterval where the sign change occurs based on the following conditions:<br>
-   If f(x0) - f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
-   If f(x0) - f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
+   If f(x0) \* f(x1) < 0, then root is between x0 and x1. So take [x0, x1] as the new subinterval.<br>
+   If f(x0) \* f(x2) < 0, then root is between x0 and x2. So take [x0, x2] as the new subinterval.
 5. Repeat the step 3 while fabs(f(x0)) > E. (Solution is close enough to zero).
 
 #### Bisection Code
