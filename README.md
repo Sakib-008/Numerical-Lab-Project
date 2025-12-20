@@ -632,7 +632,6 @@ Calculation steps:<br>
 4. Second column of L : l<sub>32</sub>, ...<br>
 5. Third row of U : u<sub>33</sub>, ...
 
-
 Solution Classification:<br>
 
 1. After decomposition if U[i][i] is zero and Y[i] is non-zero then system has no solution.
@@ -1880,14 +1879,13 @@ Algorithm:
 
 1. Given a initial value of x --> x<sub>0</sub> and y --> y<sub>0</sub>.
 2. Given a step size h, the value of y at the next point is computed using four intermediate slopes: <br>
-  k<sub>1</sub> = h * f(x<sub>n</sub>, y<sub>n</sub>)<br>
-  k<sub>2</sub> = h * f(x<sub>n</sub> + h/2, y<sub>n</sub> + k<sub>1</sub>/2)<br>
-  k<sub>3</sub> = h * f(x<sub>n</sub> + h/2, y<sub>n</sub> + k<sub>2</sub>/2)<br>
-  k<sub>4</sub> = h * f(x<sub>n</sub> + h, y<sub>n</sub> + k<sub>3</sub>)
+   k<sub>1</sub> = h _ f(x<sub>n</sub>, y<sub>n</sub>)<br>
+   k<sub>2</sub> = h _ f(x<sub>n</sub> + h/2, y<sub>n</sub> + k<sub>1</sub>/2)<br>
+   k<sub>3</sub> = h _ f(x<sub>n</sub> + h/2, y<sub>n</sub> + k<sub>2</sub>/2)<br>
+   k<sub>4</sub> = h _ f(x<sub>n</sub> + h, y<sub>n</sub> + k<sub>3</sub>)
 
 3. The next value of y is then calculated as:<br>
-   y<sub>n+1</sub> = y<sub>n</sub> + (k<sub>1</sub> + 2 * k<sub>2</sub> + 2 * k<sub>3</sub> + k<sub>4</sub>) / 6
-
+   y<sub>n+1</sub> = y<sub>n</sub> + (k<sub>1</sub> + 2 _ k<sub>2</sub> + 2 _ k<sub>3</sub> + k<sub>4</sub>) / 6
 
 #### Runge-Kutta Code
 
@@ -2413,11 +2411,11 @@ Formula:
 
 let, n is the number of data points. Then,
 
-b = n*∑xy−(∑x)(∑y)​ / n*∑x^2−(∑x)^2
+b = n∑xy−(∑x)(∑y)​ / n∑x^2−(∑x)^2
 
 a = ∑y−b∑x / n
 
-Best fit Linear Equation is:
+The best fit linear equation is:
 
 y = a + bx
 
@@ -2545,6 +2543,30 @@ Finally, the predicted value of y corresponding to x = newX is printed.
 #### Polynomial Equation Theory
 
 Polynomial equation can be solved using curve fitting. It is a numerical technique to find the best fit polynomial curve that represents the relationship between two variables based on a given set of data points. In this method, the relationship between the variables is assumed to be a polynomial of degree m and is expressed in the form: y=a0​+a1​x^1+a2​x^2+⋯+am​x^m. Here, a0,a1,a2,...,am are the coefficients of the polynomial. These coefficients are determined using the least squares principle. After the best fit polynomial equation is obtained, it can be used to predict the value of the dependent variable (y) for any given value of the independent variable (x).
+
+Formula:
+
+For each coefficient `ai` (i = 0, 1, ..., m), the normal equation is:
+
+Σ(y_k \* x_k^i) = a0Σ(x_k^i) + a1Σ(x_k^(i+1)) + a2Σ(x_k^(i+2)) + ... + amΣ(x_k^(i+m))
+
+The normal equations are written in matrix form.
+
+The best fit polynomial equation is:
+
+y = a0 + a1x + a2x^2 + ... + amx^m
+
+Algorithm:
+
+1. Create a set of equations using the least squares method based on the given data points.
+
+2. Convert the equations in matrix form.
+
+3. Solve the matrix using Gaussian elimination to find the coefficients of the polynomial.
+
+4. Determine the best fit polynomial equation using the calculated coefficients.
+
+5. Substitute the given value into the polynomial equation to calculate the predicted result.
 
 #### Polynomial Equation Code
 
@@ -2906,28 +2928,23 @@ Finally, the predicted value of y corresponding to x = newX is printed.
 ### Interpolation and Approximation
 
 ### Newton's Forward Interpolation
+
 Implemented by 2207008
 
 #### Newton's Forward Interpolation Theory
-Newton’s Forward Interpolation is used to approximate the value of a function at a point X using a set of equally spaced data points. This method is used when the interpolation point is near the begining of the given data points. The method constructs a forward difference table from the given data points. It is calculated by repeatedly subtracting each element from the one below it in the previous column, starting with the y-values in the first column. Then the method uses the table and computes the interpolated value with the formula : <br>
-y = y<sub>0</sub> 
-    + u Δy<sub>0</sub> 
-    + (u(u-1)/2!) Δ<sup>2</sup>y<sub>0</sub> 
-    + (u(u-1)(u-2)/3!) Δ<sup>3</sup>y<sub>0</sub> 
-    + ... 
-    + (u(u-1)(u-2)...(u-n+1)/n!) Δ<sup>n</sup>y<sub>0</sub><br>
-Here u = (X - x<sub>0</sub>)/h and h = x<sub>1</sub> - x<sub>0</sub>
 
+Newton’s Forward Interpolation is used to approximate the value of a function at a point X using a set of equally spaced data points. This method is used when the interpolation point is near the begining of the given data points. The method constructs a forward difference table from the given data points. It is calculated by repeatedly subtracting each element from the one below it in the previous column, starting with the y-values in the first column. Then the method uses the table and computes the interpolated value with the formula : <br>
+y = y<sub>0</sub> + u Δy<sub>0</sub> + (u(u-1)/2!) Δ<sup>2</sup>y<sub>0</sub> + (u(u-1)(u-2)/3!) Δ<sup>3</sup>y<sub>0</sub> + ... + (u(u-1)(u-2)...(u-n+1)/n!) Δ<sup>n</sup>y<sub>0</sub><br>
+Here u = (X - x<sub>0</sub>)/h and h = x<sub>1</sub> - x<sub>0</sub>
 
 Algorithm:
 
-1. Given the number of data data point and the data points (x, y). 
+1. Given the number of data data point and the data points (x, y).
 2. Check if the x-values are equally spaced. If not, then the interpolation is not possible with this method.
 3. Read the data point X to interpolate on
 4. Compute the forward difference table.
 5. Compute u and h.
 6. Use the formula above to calculate the interpolated value. <br>
-
 
 #### Newton's Forward Interpolation Code
 
@@ -2950,7 +2967,7 @@ void printDifferenceTable(const vector<vector<double>> &d, int n, ofstream &out)
     }
 }
 
-int main()  
+int main()
 {
     ifstream in("ForwardInterpolation_input.txt");
     ofstream out("ForwardInterpolation_output.txt");
@@ -3040,13 +3057,13 @@ The last line contains a real number X, the value at which interpolation is need
 #### Newton's Forward Interpolation Output
 
 ```
-Newton's Forward Interpolation Method : 
+Newton's Forward Interpolation Method :
 
 Forward Difference Table:
-       180        -30          0          0 
-       150        -30          0 
-       120        -30 
-        90 
+       180        -30          0          0
+       150        -30          0
+       120        -30
+        90
 
 Interpolated answer : 165.000
 
@@ -3066,18 +3083,14 @@ Finally, the interpolated value at X is printed with 3 decimal places.
 ```
 
 ### Newton's Backward Interpolation
+
 Implemented by 2207008
 
 #### Newton's Backward Interpolation Theory
-Newton’s Backward Interpolation is used to approximate the value of a function at a point X using a set of equally spaced data points. This method is used when the interpolation point is near the end of the given data points. The method constructs a backward difference table from the given data points. It is calculated by repeatedly subtracting each element in the previous column from the element above it, starting with the y-values in the first column. Then the method uses the table and computes the interpolated value with the formula:<br>
-y = y<sub>n</sub> 
-    + v ∇y<sub>n</sub> 
-    + (v(v+1)/2!) ∇<sup>2</sup>y<sub>n</sub> 
-    + (v(v+1)(v+2)/3!) ∇<sup>3</sup>y<sub>n</sub> 
-    + ... 
-    + (v(v+1)(v+2)...(v+n-1)/n!) ∇<sup>n</sup>y<sub>n</sub><br>
-Here v = (X - x<sub>n</sub>)/h and h = x<sub>1</sub> - x<sub>0</sub>
 
+Newton’s Backward Interpolation is used to approximate the value of a function at a point X using a set of equally spaced data points. This method is used when the interpolation point is near the end of the given data points. The method constructs a backward difference table from the given data points. It is calculated by repeatedly subtracting each element in the previous column from the element above it, starting with the y-values in the first column. Then the method uses the table and computes the interpolated value with the formula:<br>
+y = y<sub>n</sub> + v ∇y<sub>n</sub> + (v(v+1)/2!) ∇<sup>2</sup>y<sub>n</sub> + (v(v+1)(v+2)/3!) ∇<sup>3</sup>y<sub>n</sub> + ... + (v(v+1)(v+2)...(v+n-1)/n!) ∇<sup>n</sup>y<sub>n</sub><br>
+Here v = (X - x<sub>n</sub>)/h and h = x<sub>1</sub> - x<sub>0</sub>
 
 Algorithm:
 
@@ -3141,7 +3154,7 @@ int main()
 
     double X;
     in >> X; // Value of x to interpolate
-    
+
     vector<vector<double>> d(n, vector<double>(n, 0));
     for (int i = 0; i < n; i++)
         d[i][0] = y[i];
@@ -3200,14 +3213,14 @@ The last line contains a real number X, the value at which interpolation is need
 #### Newton's Backward Interpolation Output
 
 ```
-Newton's Backward Interpolation Method : 
+Newton's Backward Interpolation Method :
 
 Difference Table:
-     28.06 
-     30.19       2.13 
-     32.75       2.56       0.43 
-     34.94       2.19      -0.37       -0.8 
-        40       5.06       2.87       3.24       4.04 
+     28.06
+     30.19       2.13
+     32.75       2.56       0.43
+     34.94       2.19      -0.37       -0.8
+        40       5.06       2.87       3.24       4.04
 
 Interpolated answer = 33.275
 
@@ -3235,14 +3248,8 @@ f[x<sub>i</sub>, x<sub>j</sub>] = (f(x<sub>i</sub>) - f(x<sub>j</sub>)) / (x<sub
 f[x<sub>i</sub>, x<sub>j</sub>, x<sub>k</sub>] = (f[x<sub>i</sub>, x<sub>j</sub>] - f[x<sub>j</sub>, x<sub>k</sub>]) / (x<sub>i</sub> - x<sub>k</sub>)<br>
 f[x<sub>i</sub>, x<sub>j</sub>, x<sub>k</sub>, x<sub>l</sub>] = (f[x<sub>i</sub>, x<sub>j</sub>, x<sub>k</sub>] - f[x<sub>j</sub>, x<sub>k</sub>, x<sub>l</sub>]) / (x<sub>i</sub> - x<sub>l</sub>)<br>
 
-
 Then the interpolated value is calculated using the formula:<br>
-f(x<sub>n</sub>) = f(x<sub>0</sub>) 
-                  + (x - x<sub>0</sub>) f[x<sub>1</sub>, x<sub>0</sub>] 
-                  + (x - x<sub>0</sub>)(x - x<sub>1</sub>) f[x<sub>2</sub>, x<sub>1</sub>, x<sub>0</sub>] 
-                  + (x - x<sub>0</sub>)(x - x<sub>1</sub>)(x - x<sub>2</sub>) f[x<sub>3</sub>, x<sub>2</sub>, x<sub>1</sub>, x<sub>0</sub>] 
-                  + ... 
-                  + (x - x<sub>0</sub>)(x - x<sub>1</sub>)...(x - x<sub>n-1</sub>) f[x<sub>n</sub>, x<sub>n-1</sub>, ..., x<sub>0</sub>]<br>
+f(x<sub>n</sub>) = f(x<sub>0</sub>) + (x - x<sub>0</sub>) f[x<sub>1</sub>, x<sub>0</sub>] + (x - x<sub>0</sub>)(x - x<sub>1</sub>) f[x<sub>2</sub>, x<sub>1</sub>, x<sub>0</sub>] + (x - x<sub>0</sub>)(x - x<sub>1</sub>)(x - x<sub>2</sub>) f[x<sub>3</sub>, x<sub>2</sub>, x<sub>1</sub>, x<sub>0</sub>] + ... + (x - x<sub>0</sub>)(x - x<sub>1</sub>)...(x - x<sub>n-1</sub>) f[x<sub>n</sub>, x<sub>n-1</sub>, ..., x<sub>0</sub>]<br>
 
 Algorithm:
 
@@ -3337,7 +3344,7 @@ The last line contains a real number X, the value at which interpolation is need
 #### Divided Difference Interpolation Output
 
 ```
-Newton's Divided Difference Interpolation Method : 
+Newton's Divided Difference Interpolation Method :
 Interpolated value: 0.628762
 
 ```
@@ -3354,6 +3361,7 @@ Finally, the interpolated value at X is printed with 6 decimal places.
 ```
 
 ### Divided Difference Interpolation with Error
+
 Implemented by 2207008
 
 #### Divided Difference Interpolation with Error Theory
@@ -3362,6 +3370,7 @@ Newton’s Divided Difference Interpolation with error calculation is used to ap
 R<sub>n</sub> ≅ f[x<sub>n+1</sub>, x<sub>n</sub>, x<sub>n-1</sub>, ..., x<sub>1</sub>, x<sub>0</sub>] (x - x<sub>0</sub>)(x - x<sub>1</sub>) ... (x - x<sub>n</sub>)<br>
 
 Algorithm:
+
 1. Read the number of data points n and the first n data points (x, y).
 2. Read the extra point for error estimation.
 3. Read the value X to interpolate.
@@ -3369,7 +3378,6 @@ Algorithm:
 5. Compute higher-order divided differences as before.
 6. Compute the interpolated value using the Newton divided difference formula.
 7. Compute the estimated error using the extra point with the above formula given above.
-
 
 #### Divided Difference Interpolation with Error Code
 
@@ -3382,7 +3390,7 @@ using namespace std;
 int main() {
     ifstream in("DividedDifferenceWithError_input.txt");
     ofstream out("DividedDifferenceWithError_output.txt");
-    
+
     if (!in || !out) {
         out << "Error opening input/output file!" << endl;
         return 1;
@@ -3428,7 +3436,7 @@ int main() {
         errP *= (X - x[i]);
     double error = fabs(errP * d[0][n]);
     out << "Estimated error using the extra point: " << error << endl;
-    
+
     return 0;
 }
 
@@ -3463,7 +3471,7 @@ The last line contains a real number X, the value at which interpolation is need
 #### Divided Difference Interpolation with Error Output
 
 ```
-Newton's Divided Difference Interpolation Method for Calculating Error: 
+Newton's Divided Difference Interpolation Method for Calculating Error:
 Interpolated value : 0.565846
 Estimated error using the extra point: 0.062916
 
