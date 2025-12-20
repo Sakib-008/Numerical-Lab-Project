@@ -623,7 +623,7 @@ Implemented by 2207008
 
 #### LU Decomposition Theory
 
-LU factorrization is a matrix decomposition technique used to solve a system of linear equations efficientlly. This method is also called Cholesky method, Doolittle's method, Crout's method. In this method, a square matrix A is decomposed into the product of two triangluar matrices. A = LU. Here L is a lower triangular matrix whose all diagonal elements are 1 and U is an upper triangular matrix. It simplifies the system AX = B by converting it into two simpler systems. AX = B --> LUX = B --> LY = B where (UX = Y). Then solves LY = B by forward substitution and UX = Y. This method is useful when solving system with the same coefficient matrix A but the constant vector B changes. <br>
+LU factorrization is a matrix decomposition technique used to solve a system of linear equations efficientlly. This method is also called Cholesky method, Doolittle's method, Crout's method. In this method, a square matrix A is decomposed into the product of two triangluar matrices. A = LU. Here L is a lower triangular matrix whose all diagonal elements are 1 and U is an upper triangular matrix. It simplifies the system AX = B by converting it into two simpler systems. AX = B --> LUX = B --> LY = B where (UX = Y). Then solves LY = B by forward substitution and UX = Y by backward substitution. This method is useful when solving system with the same coefficient matrix A but the constant vector B changes. <br>
 Calculation steps:<br>
 
 1. First row of U : u<sub>11</sub>, u<sub>12</sub>, u<sub>13</sub>, ...<br>
@@ -658,7 +658,7 @@ int main()
     }
 
     out << fixed << setprecision(3);
-    out<<"LU Factorization method : "<<endl;
+    out << "LU Factorization method : " << endl;
 
     int t; // Number of test cases
     in >> t;
@@ -738,14 +738,16 @@ int main()
             if (fabs(U[i][i]) < 1e-9 && fabs(Y[i]) > 1e-9)
             {
                 out << "\nNo Solution!" << endl;
-                        out << "\n------------------------------\n" << endl;
+                out << "\n------------------------------\n"
+                    << endl;
                 soln = false;
                 break;
             }
             else if (fabs(U[i][i]) < 1e-9 && fabs(Y[i]) < 1e-9)
             {
                 out << "\nInfinite Solution!" << endl;
-                        out << "\n------------------------------\n" << endl;
+                out << "\n------------------------------\n"
+                    << endl;
                 soln = false;
                 break;
             }
@@ -767,7 +769,8 @@ int main()
         {
             out << "x" << i + 1 << " = " << X[i] << endl;
         }
-        out << "\n------------------------------\n" << endl;
+        out << "\n------------------------------\n"
+            << endl;
     }
     in.close();
     out.close();
